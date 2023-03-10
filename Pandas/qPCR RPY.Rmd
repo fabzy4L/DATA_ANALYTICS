@@ -1,0 +1,41 @@
+---
+title: "qPCR - Python Environment"
+output: html_notebook
+---
+
+
+```{r}
+#LOAD LIBRARY AND INSTALL PACKAGES
+library(reticulate)
+py_install("pandas")
+py_install("numpy")
+py_install("scipy")
+py_install("matplotlib") #.pylab as plt
+pd <- import("pandas")
+np <- import("numpy")
+sp <- import("scipy")
+plt <- import("matplotlib")
+
+```
+
+
+```{r}
+#type in terminal "which python" or "which python3"
+library(reticulate)
+version <- "3.11"
+#install_python("/Library/Frameworks/Python.framework/Versions/3.11/bin/python3")
+virtualenv_create("Python", python_version = version)
+```
+
+
+```{r}
+qpcr = pd$read_csv('/Users/f4L/Library/Containers/com.microsoft.Excel/Data/Desktop/RStudioDataAnalysis/GENE EXPRESSION NICOTINE DATA ANALYSIS/qPCR all values - qPCR.csv')
+qpcr
+```
+
+
+```{r}
+shapiro.test(qpcr$CERKL)
+```
+
+

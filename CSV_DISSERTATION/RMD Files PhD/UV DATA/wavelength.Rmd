@@ -1,0 +1,314 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+UVdata
+```
+
+
+
+```{r}
+control1A <-  UVdata$Control.1A
+ppm201A <-  UVdata$X20.ppm.1A
+ppm251A <-  UVdata$X25.ppm.1A
+wavelength<- UVdata$Wavelength
+control2A <-  UVdata$Control.2A
+ppm202A <-  UVdata$X20.ppm.2A
+ppm252A <-  UVdata$X25.ppm.2A
+control3A <-  UVdata$Control.3A
+ppm203A <-  UVdata$X20.ppm.3A
+ppm253A <-  UVdata$X25.ppm.3A
+
+
+
+#par(mfrow=c(2,2))
+#Sample 1A
+plot.default(wavelength,abs(control1A), type = 'l', ylab="Absorbance", xlim=c(200,900), ylim=c(0,1), xlab="Wavelength (nm)" , main = 'Sample 1, 1st Run')
+lines(wavelength,abs(control1A), type = 'l', col="black", lty=1)
+lines(wavelength, abs(ppm201A), type='l', col="black",lty=2)
+lines(wavelength,abs(ppm251A), type='l', col="black", lty=3)
+abline(0,0,lty=4, col="black")
+legend("topright", c("1 PPM", "20 PPM", "25 PPM"), lty=c(1,2,3),col=c("black", "black", "black"), cex=0.7)
+#points(f.gator$snout.vent, f.gator$pelvic.width, pch=5, col="pink")
+
+#Sample 2A
+plot.default(wavelength,abs(control2A), type = 'l', ylab="Absorbance", ylim=c(0,1), xlim=c(200,900), xlab="Wavelength (nm)", main = 'Sample 2, 1st Run')
+#par(new=TRUE)
+lines(wavelength,abs(control2A), type = 'l', col="black", lty=1)
+#par(new=TRUE)
+lines(wavelength, abs(ppm202A), type='l', col="black",lty=2)
+#par(new=TRUE)
+lines(wavelength,abs(ppm252A), type='l', col="black", lty=3)
+#abline(0,0,lty=4, col="black")
+legend("topright", c("1 PPM", "20 PPM", "25 PPM"), lty=c(1,2,3),col=c("black", "black", "black"), cex=0.7)
+
+#Sample 3A
+plot.default(wavelength,control3A, type = 'l', ylim = c(-1,1), ylab="Absorbance", xlim=c(200,900), xlab="Wavelength (nm)" , main = 'Sample 3, 1st Run')
+lines(wavelength,control3A, type = 'l', col="black", lty=1)
+lines(wavelength, ppm203A, type='l', col="black",lty=2)
+lines(wavelength,ppm253A, type='l', col="black", lty=3)
+abline(0,0,lty=1, col="red",lwd=2)
+legend("topright", c("Control","1 PPM", "20 PPM", "25 PPM"), lty=c(1,1,2,3),col=c("red","black", "black", "black"), cex=0.7)
+
+finaly=(rowSums(cbind(abs(control1A),abs(control2A),abs(control3A)), na.rm = TRUE))/3
+fincont=(rowSums(cbind(abs(ppm201A),abs(ppm202A),abs(ppm203A)), na.rm = TRUE))/3
+fin25=(rowSums(cbind(abs(ppm251A),abs(ppm252A),abs(ppm253A)), na.rm = TRUE))/3
+
+plot(wavelength,finaly, type='l', ylim=c(0,1))
+lines(wavelength,fincont, type='l',col='red')
+lines(wavelength,fin25, type='l',col='gray')
+```
+```{r}
+control1B <-  UVdata$Control.1B
+ppm201B <-  UVdata$X20.ppm.1B
+ppm251B <-  UVdata$X25.ppm.1B
+wavelength<- UVdata$Wavelength
+control2B <-  UVdata$Control.2B
+ppm202B <-  UVdata$X20.ppm.2B
+ppm252B <-  UVdata$X25.ppm.2B
+control3B <-  UVdata$Control.3B
+ppm203B <-  UVdata$X20.ppm.3B
+ppm253B <-  UVdata$X25.ppm.3B
+
+xb <- (1/control1B)
+
+
+#par(mfrow=c(1,2))
+#Sample 1A
+plot.default(wavelength,(abs(control1B)), type = 'l', ylab="Absorbance", ylim=c(0,1),xlim=c(200,900), xlab="Wavelength (nm)", main = 'Sample 1, 2nd Run')
+#lines(wavelength,xb, type = 'l', col="black", lty=1)
+lines(wavelength, abs(ppm201B), type='l', col="black",lty=2)
+lines(wavelength,abs(ppm251B), type='l', col="black", lty=3)
+#abline(0,0,lty=4, col="black")
+legend("topright", c("1 PPM", "20 PPM", "25 PPM"), lty=c(1,2,3),col=c("black", "black", "black"), cex=0.7)
+#points(f.gator$snout.vent, f.gator$pelvic.width, pch=5, col="pink")
+
+#Sample 2A
+plot.default(wavelength,control2B, type = 'n', ylim = c(0,1), ylab="Absorbance", xlim=c(200,900), xlab="Wavelength (nm)", main = 'Sample 2, 2nd Run')
+lines(wavelength,abs(control2B), type = 'l', col="black", lty=1)
+lines(wavelength, abs(ppm202B), type='l', col="black",lty=2)
+lines(wavelength,abs(ppm252B), type='l', col="black", lty=3)
+#abline(0,0,lty=4, col="black")
+legend("topright", c("1 PPM", "20 PPM", "25 PPM"), lty=c(1,2,3),col=c("black", "black", "black"), cex=0.7)
+
+#Sample 3A
+plot.default(wavelength,abs(control3B), type = 'l', ylim = c(0,1), ylab="Absorbance", xlim=c(200,900), xlab="Wavelength (nm)", main = 'Sample 3, 2nd Run')
+lines(wavelength,abs(control3B), type = 'l', col="black", lty=1)
+lines(wavelength, abs(ppm203B), type='l', col="black",lty=2)
+lines(wavelength,abs(ppm253B), type='l', col="black", lty=3)
+#abline(0,0,lty=4, col="black")
+legend("topright", c("1 PPM", "20 PPM", "25 PPM"), lty=c(1,2,3),col=c("black", "black", "black"), cex=0.7)
+
+
+finalyB=(rowSums(cbind(abs(control1B),abs(control2B),abs(control3B)), na.rm = TRUE))/3
+fincontB=(rowSums(cbind(abs(ppm201B),abs(ppm202B),abs(ppm203B)), na.rm = TRUE))/3
+fin25B=(rowSums(cbind(abs(ppm251B),abs(ppm252B),abs(ppm253B)), na.rm = TRUE))/3
+
+plot(wavelength,finalyB, type='l', ylim=c(0,1))
+lines(wavelength,fincontB, type='l',col='red')
+lines(wavelength,fin25B, type='l',col='gray')
+```
+
+
+```{r}
+control1C <-  UVdata$Control.1C
+ppm201C <-  UVdata$X20.ppm.1C
+ppm251C <-  UVdata$X25.ppm.1C
+wavelength<- UVdata$Wavelength
+control2C <-  UVdata$Control.2C
+ppm202C <-  UVdata$X20.ppm.2C
+ppm252C <-  UVdata$X25.ppm.2C
+control3C <-  UVdata$Control.3C
+ppm203C <-  UVdata$X20.ppm.3C
+ppm253C <-  UVdata$X25.ppm.3C
+
+
+
+#par(mfrow=c(1,2))
+#Sample 1A
+plot.default(wavelength,control1C, type = 'n', ylim = c(0,1), ylab="Absorbance", xlim=c(200,900), xlab="Wavelength (nm)", main = 'Sample 1, 3rd Run')
+lines(wavelength,abs(control1C), type = 'l', col="black", lty=1)
+lines(wavelength, abs(ppm201C), type='l', col="black",lty=2)
+lines(wavelength,abs(ppm251C), type='l', col="black", lty=3)
+abline(0,0,lty=4, col="black")
+legend("topright", c("1 PPM", "20 PPM", "25 PPM"), lty=c(1,2,3),col=c("black", "black", "black"), cex=0.7)
+#points(f.gator$snout.vent, f.gator$pelvic.width, pch=5, col="pink")
+
+#Sample 2A
+plot.default(wavelength,control2C, type = 'n', ylim = c(0,1), ylab="Absorbance", xlim=c(200,900), xlab="Wavelength (nm)", main = 'Sample 2, 3rd Run')
+lines(wavelength,abs(control2C), type = 'l', col="black", lty=1)
+lines(wavelength, abs(ppm202C), type='l', col="black",lty=2)
+lines(wavelength,abs(ppm252C), type='l', col="black", lty=3)
+#abline(0,0,lty=4, col="black")
+legend("topright", c("1 PPM", "20 PPM", "25 PPM"), lty=c(1,2,3),col=c("black", "black", "black"), cex=0.7)
+
+#Sample 3A
+plot.default(wavelength,control3C, type = 'l', ylim = c(0,1), ylab="Absorbance", xlim=c(200,900), xlab="Wavelength (nm)", main = 'Sample 3, 3rd Run',font=2)
+lines(wavelength,abs(control3C), type = 'l', col="black", lty=1)
+lines(wavelength, abs(ppm203C), type='l', col="black",lty=2)
+lines(wavelength,abs(ppm253C), type='l', col="black", lty=3)
+#abline(0,0,lty=4, col="black")
+legend("topright", c("1 PPM", "20 PPM", "25 PPM"), lty=c(1,2,3),col=c("black", "black", "black"), cex=0.7)
+
+
+finalyC=(rowSums(cbind(abs(control1C),abs(control2C),abs(control3C)), na.rm = TRUE))/3
+fincontC=(rowSums(cbind(abs(ppm201C),abs(ppm202C),abs(ppm203C)), na.rm = TRUE))/3
+fin25C=(rowSums(cbind(abs(ppm251C),abs(ppm252C),abs(ppm253C)), na.rm = TRUE))/3
+```
+
+
+```{r}
+plot(j.to.ev(wavelength),control3B, type = 'n', ylab = '', xaxt='n',yaxt="n",xlab='', lwd=2, font=2, xlim=c(6.2,1.37))
+axis(3, col="black",ylab='eV',cex.axis=0.8,col.axis="black",las=0,font=2,xlim=c(6,1))
+mtext("eV", side=3, line=2, cex.lab=0.75, col="black",font=2)
+mtext("Absorbance", side=2, line=2.3, cex.lab=1, col="black",font=2)
+mtext("Wavelength", side=1, line=2.3, cex.lab=1, col="black",font=2)
+legend("topright", c("control","1 PPM", "20 PPM", "25 PPM"), lty=c(2,1,1,1),lwd=c(2,1.5,2,2),col=c("red","black", "red", "dark grey"), cex=0.6)
+#
+par(new=TRUE)
+#
+plot(wavelength,control3B, type='l',lwd=2,lty=1, ylim=c(0,1),xlim=c(200,900),xlab = "", ylab="",cex=1.5, font=2)
+lines(wavelength,abs(ppm203B), type='l',lwd=2,col='red',lty=1)
+lines(wavelength,abs(ppm253B), type='l',col='grey',lwd=2,lty=1)
+abline(0,0,lwd=2,col='red',lty=2)
+
+
+
+```
+
+
+```{r}
+
+elec(wavelength)
+
+```
+
+
+```{r}
+# BL LAW = A = ELC
+
+(24*(10^4))*(5.2*(10^6))
+#Absorption coefficient of CNTs = ~24 x 10^4 cm-1
+# Molecular weight of cnts = 12.01
+
+#Molar mass of CNTs is 181.2117 g/mol 
+
+#MOLAR ABS COEF = 1.248e+12
+
+0.4525/(1*(1.248e+12))
+
+#6.570376e-11 mg/mL
+
+
+# 3.625801e-13 mol/L 
+
+(3.625801*(10^-13))*(181.2117)
+
+# calculated molecular weight - 3.4×10^5 – 5.2×10^6 Amu
+# or 8.63480239x10^-18 grams
+
+# Max Surf Area 1315 m2/g
+# BET surf AREA - 400 – 1000 m2/g
+
+#Evaporation rate ~1.958x10-4 @ 21°C
+
+# Raw	<35% wt% Fe,	0.8 – 1.2 diam,	~100 – 1,000 nm length
+
+
+max(abs(control3B))
+max(abs(ppm203B))
+max(abs(ppm253B))
+```
+
+
+```{r}
+ˆ
+
+total.av.1ppm = (rowSums(cbind(finaly,finalyB,finalyC), na.rm = TRUE))/3
+total.fincont= (rowSums(cbind(fincont,fincontB,fincontC), na.rm = TRUE))/3
+total.fin25= (rowSums(cbind(fin25,fin25B,fin25C), na.rm = TRUE))/3
+
+plot(wavelength,total.av.1ppm, type='l', ylim=c(0,1))
+lines(wavelength,total.fincont, type='l',col='red')
+lines(wavelength,total.fin25, type='l',col='gray')
+
+```
+
+
+```{r}
+c <- 300000000
+h <- 6.626*(10^-34)
+Q <- 1.602*(10^-19)
+
+
+nm.to.m <- function(nm) {
+  m <- (nm*(10^-9))
+  return(m)}
+
+Frequency.Photon <- function(m) {
+  v <- (c/m)
+  return(v)}
+
+Photon.Energy <- function(v) {
+  D.E. <- (h*v)
+  return(D.E.)}
+
+elec <- function(x){
+  vo.2 <- (j.to.ev(Photon.Energy(Frequency.Photon(nm.to.m(x)))))
+  return(vo.2)}
+
+j.to.ev <- function(x) {
+  eV <- (((Photon.Energy(Frequency.Photon(nm.to.m(x)))))/Q)
+  return(eV)}
+
+ T <- function(x){
+  Transmittance <- (10^(-(abs(x))))
+  return(Transmittance)}
+
+
+  
+j.to.ev(200)
+```
+
+
+```{r}
+plot(wavelength,T(control3C), type='l', ylim=c(0,1))
+
+```
+
+
+```{r}
+
+#
+plot(wavelength,((T(control3C))*100), type = 'l', ylab = '', xlab='', lwd=2, font=2,ylim = c(0,100),xlim = c(200,900))
+lines(wavelength, ((T(ppm203C))*100),type = 'l', col = 'red', lwd=2)
+lines(wavelength, ((T(ppm253C))*100), type='l', lwd=2, col='grey')
+abline(100,0,lty=2,col='red',lwd=2)
+legend("bottomright", c("control","1 PPM", "20 PPM", "25 PPM"), lty=c(2,1,1,1),lwd=c(2,1.5,2,2),col=c("red","black", "red", "gray"), cex=0.6)
+
+par(new=TRUE)
+
+plot(j.to.ev(wavelength),((T(control3C))*100),ylab='',xlab = '', type='n',ylim = c(0,100), xlim=c(6.2,1.37), axes = FALSE )
+axis(3, col="black",ylab='eV',cex.axis=0.8,col.axis="black",las=0,font=2)
+mtext("eV", side=3, line=2, cex.lab=0.75, col="black",font=2)
+mtext("Transmittance (%)", side=2, line=2.3, cex.lab=1, col="black",font=2)
+mtext("Wavelength (nm)", side=1, line=2.3, cex.lab=1, col="black",font=2)
+
+
+#plot(wavelength,((T(control3C))*100), type = 'n', ylab = '', xlab='', lwd=2, font=2,ylim = c(0,100),xlim = c(200,900))
+#legend("bottomright", c("control","1 PPM", "20 PPM", "25 PPM"), lty=c(2,1,1,1),lwd=c(2,1.5,2,2),col=c("red","black", "red", "gray"), cex=0.6)
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+

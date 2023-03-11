@@ -1,0 +1,117 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+#H20 = 18.015 g/mol -> density = 1 g/ml = if 1 ml then 1 g. - - - (1/18.015) =  0.05540166 mol/ml
+T = 298
+#dG = dH - dS*T = P - R = [Ca2+]+[2Cl-]+[3H2O] - [CaCl2.2H2O]+ [H20]
+#dGst kJ/mol
+dGst.CaCl2. = -748.81
+dHst.CA2.ion = -542.9
+dGst.CA2.ion = 	-553.04
+dSst.CA2.ion = -53.1
+dHst.Cl.ion = -167.16
+dSst.Cl.ion = 56.5
+dHst.H20 = -285.8
+dGst.H20 = -237.13 
+dGf.CaCl2.2H20 = -1402.9
+
+#dihydrite is theoretically at most: (110.98 g/mol/147 g/mol x 100%) = 75.50 % calcium chloride. 
+dGst.Cl.ion = dHst.Cl.ion - (dSst.Cl.ion*T)
+dGst.Cl.ion
+P1 = ((dGst.CA2.ion)+(2*dGst.Cl.ion)+(3*dGst.H20))
+P1
+R1 = ((dGf.CaCl2.2H20)+ (dGst.H20))
+R1
+dGT = P1 - R1
+dGT
+#dGT = -33632.72 kJ/mol
+```
+
+
+```{r}
+#1. g/ml
+mol.mas.g.mol= 147.01
+#2. M = mol/L
+molarity = 0.245
+#3. g/L for molarity
+grams.of.Ca = (mol.mas.g.mol*molarity)
+grams.of.Ca
+#4. g/L -> mg/mL
+mg.ml.Ca.2 = grams.of.Ca
+```
+```{r}
+#Soution Volume
+v.Sol = 3
+#g/cm^3 or g/mL
+dens.Ca = 1.85
+#g/cm^3 or g/mL
+g.ml.Ca = (mg.ml.Ca.2*v.Sol/1000)
+vol.Ca.req =  g.ml.Ca/dens.Ca
+vol.Ca.req
+#Water needed for solution
+vol.water.req = v.Sol - vol.Ca.req
+vol.water.req
+#g/cm^3 or g/mL
+dens.water = 1
+g.water = dens.water*vol.water.req
+# (g/1)/(g/ml) = ml 
+
+
+
+dens.water = 1
+#0.25 M is 36.75 mg/ml or 0.03675 g/ml. at a 2 mL solution of water, 0.0735 g are added. resulting in an extra 0.03972973 mL added to the 2 mL volume.
+vT = vol.water.req + vol.Ca.req
+vT
+#1 mL = .900 w + (.10*vol.water)
+mT = g.water + g.ml.Ca
+dT = mT/vT
+dT
+#
+xw = vol.water.req/(vol.water.req + vol.Ca.req)
+xca = vol.Ca.req/(vol.water.req + vol.Ca.req)
+#
+dT2 = dens.water*xw + dens.Ca*xca
+dT2
+
+vT2 = v.Sol*xw + v.Sol*xca
+vT2
+
+# Molarity calculation
+
+M = (grams.of.Ca*v.Sol/vol.water.req)/(mol.mas.g.mol)
+M
+
+```
+```{r}
+#dG = - RT ln K 
+# CaCl2-2H20(s) + H20(l) -> Ca2+(l) + 2Cl-(l) + 3H20(l)
+# AG = P - R = 
+
+# dG = dGst + RT ln Q
+# E = (RT/zF)*log(Oion/Iion) or E =  2.3026*(RT/zF)*log10(Oion/Iion)
+
+#mg/mol. 36.75g/L of CaCl2  are 0.25 M --- 36.75g/1000ml = 0.03675 mg/ml
+#0.05540166 * 0.03675
+```
+
+
+```{r}
+
+# for a 0.25 M solution of CaCl2, we need 0.03575 g/ml, that said for 1 ml, 0.03575 g of CaCl2 (0.01986486 cm^3), leaving 0.98013114 g or ml of water. 36.75 mg/ml = 0.25 M. 36.75mg/0.98013114 mL
+36.75/0.98013114
+37.49498/147
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+

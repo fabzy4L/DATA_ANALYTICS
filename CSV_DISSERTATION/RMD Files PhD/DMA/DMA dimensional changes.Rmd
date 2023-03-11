@@ -1,0 +1,197 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+
+DMA.samples.weight
+
+#1 cm^3 = 1 mL
+# 1 mm^3 = 0.001 cm^3
+
+```
+```{r}
+#Normal DATA 
+shapiro.test(DMA.samples.weight$length)
+shapiro.test(DMA.samples.weight$width)
+shapiro.test(DMA.samples.weight$height)
+
+S1.MEAN.L <- mean(DMA.samples.weight[1:3,2])
+S2.MEAN.L <- mean(DMA.samples.weight[4:6,2])
+S3.MEAN.L <- mean(DMA.samples.weight[7:9,2])
+S4.MEAN.L <- mean(DMA.samples.weight[10:12,2])
+S5.MEAN.L <- mean(DMA.samples.weight[13:15,2])
+S1.MEAN.W <- mean(DMA.samples.weight[1:3,3])
+S2.MEAN.W <- mean(DMA.samples.weight[4:6,3])
+S3.MEAN.W <- mean(DMA.samples.weight[7:9,3])
+S4.MEAN.W <- mean(DMA.samples.weight[10:12,3])
+S5.MEAN.W <- mean(DMA.samples.weight[13:15,3])
+S1.MEAN.H <- mean(DMA.samples.weight[1:3,4])
+S2.MEAN.H <- mean(DMA.samples.weight[4:6,4])
+S3.MEAN.H <- mean(DMA.samples.weight[7:9,4])
+S4.MEAN.H <- mean(DMA.samples.weight[10:12,4])
+S5.MEAN.H <- mean(DMA.samples.weight[13:15,4])
+S1.sd.L <- sd(DMA.samples.weight[1:3,2])
+S2.sd.L <- sd(DMA.samples.weight[4:6,2])
+S3.sd.L <- sd(DMA.samples.weight[7:9,2])
+S4.sd.L <- sd(DMA.samples.weight[10:12,2])
+S5.sd.L <- sd(DMA.samples.weight[13:15,2])
+S1.sd.W <- sd(DMA.samples.weight[1:3,3])
+S2.sd.W <- sd(DMA.samples.weight[4:6,3])
+S3.sd.W <- sd(DMA.samples.weight[7:9,3])
+S4.sd.W <- sd(DMA.samples.weight[10:12,3])
+S5.sd.W <- sd(DMA.samples.weight[13:15,3])
+S1.sd.H <- sd(DMA.samples.weight[1:3,4])
+S2.sd.H <- sd(DMA.samples.weight[4:6,4])
+S3.sd.H <- sd(DMA.samples.weight[7:9,4])
+S4.sd.H <- sd(DMA.samples.weight[10:12,4])
+S5.sd.H <- sd(DMA.samples.weight[13:15,4])
+
+
+VM0 <- (8.7*30*2)
+VM1 <- (S1.MEAN.L*S1.MEAN.W*S1.MEAN.H)
+VM2 <- (S2.MEAN.L*S2.MEAN.W*S2.MEAN.H)
+VM3 <- (S3.MEAN.L*S3.MEAN.W*S3.MEAN.H)
+VM4 <- (S4.MEAN.L*S4.MEAN.W*S4.MEAN.H)
+VM5 <- (S5.MEAN.L*S5.MEAN.W*S5.MEAN.H)
+VM1.sd <- (S1.sd.L*S1.sd.W*S1.sd.H)
+VM2.sd <- (S2.sd.L*S2.sd.W*S2.sd.H)
+VM3.sd <- (S3.sd.L*S3.sd.W*S3.sd.H)
+VM4.sd <- (S4.sd.L*S4.sd.W*S4.sd.H)
+VM5.sd <- (S5.sd.L*S5.sd.W*S5.sd.H)
+VMT = c((VM0/1000),(VM1/1000),(VM2/1000),(VM3/1000),(VM4/1000),(VM5/1000))
+VM.sd = c((0/1000),(VM1.sd/1000),(VM2.sd/1000),(VM3.sd/1000),(VM4.sd/1000),(VM5.sd/1000))
+xax = c(0,1,2,3,4,5)
+VM1.sd
+VM1
+
+plot(xax,VMT, ylab = "Vol (Cm^3)", xlab = "Sample No.", ylim=c(0,1), xaxt = 'n')
+#arrows(2,(VM1-VM1.sd),2,(VM1-VM1.sd), length= 0.05, angle = 90, code= 3 )
+
+axis(1, at=0:5, labels= c("Control", "Sample 1", "Sample 2", "Sample 3", "Sample 4", "Sample 5"))   
+```
+
+
+```{r}
+plot(xax,VMT, ylab = "Vol (Cm^3)", xlab = "Sample No.", ylim=c(0,1), xaxt = 'n')
+```
+
+
+```{r}
+
+#SA:V
+sa.v <- function(l,h,b){((2/l)+(2/h)+(2/b))}
+  
+
+
+
+```
+
+
+```{r}
+(((VM1/VM0)-1)*100)
+(((VM2/VM0)-1)*100)
+(((VM3/VM0)-1)*100)
+(((VM4/VM0)-1)*100)
+(((VM5/VM0)-1)*100)
+```
+
+
+```{r}
+# 1-2, 2-4, 3-4, 3-5
+anova(lm(l.2~s.2))
+TukeyHSD(aov(l.2~s.2))
+```
+
+
+```{r}
+#ALL WIDTHS ARE EQUAL
+anova(lm(w.2~s.2))
+TukeyHSD(aov(w.2~s.2))
+```
+
+
+```{r}
+anova(lm(h.2~s.2))
+TukeyHSD(aov(h.2~s.2))
+```
+
+
+```{r}
+
+anova(lm(v.2~s.2))
+TukeyHSD(aov(v.2~s.2))
+
+
+```
+
+
+```{r}
+#Data ARE normal
+par(mfrow=c(2,3))
+v.2 = ((l.2*w.2*h.2)/1000)
+#plot(xax,VMT, ylim = c(0,1))
+plot(v.2~s.2, ylim=c(0,1), ylab = "Vol (Cm^3)", xlab = "Sample No.", xaxt = 'n')
+axis(1, at=0:5, labels= c("Control", "Sample 1", "Sample 2", "Sample 3", "Sample 4", "Sample 5"))   
+abline(0.522,0, col='red')
+plot(l.2~s.2, ylim=c(21,30), ylab = "Length (mm)", xlab = "Sample No.", xaxt = 'n')
+axis(1, at=0:5, labels= c("Control", "Sample 1", "Sample 2", "Sample 3", "Sample 4", "Sample 5")) 
+abline(30,0, col='red')
+plot(w.2~s.2, ylim=c(0,10), ylab = "Width (mm)", xlab = "Sample No.", xaxt = 'n')
+axis(1, at=0:5, labels= c("Control", "Sample 1", "Sample 2", "Sample 3", "Sample 4", "Sample 5"))
+abline(8.7,0, col='red')
+plot(h.2~s.2, ylim=c(0,3), ylab = "Height (mm)", xlab = "Sample No.", xaxt = 'n')
+axis(1, at=0:5, labels= c("Control", "Sample 1", "Sample 2", "Sample 3", "Sample 4", "Sample 5")) 
+abline(2,0, col='red')
+plot(s.2,sar.ratio, ylab='Surface Area:Volume Ratio', xlab='Sample No.', xaxt='n')
+axis(1, at=0:5, labels= c("Control", "Sample 1", "Sample 2", "Sample 3", "Sample 4", "Sample 5"))
+abline(1.296552,0, col='red')
+```
+
+
+```{r}
+l.2 <- DMA.samples.weight$length
+s.2 <- DMA.samples.weight$sample
+w.2 <- DMA.samples.weight$width
+h.2 <- DMA.samples.weight$height
+anova(lm(l.2~s.2))
+```
+
+
+```{r}
+sar.ratio <- sa.v(l.2,w.2,h.2)
+anova(lm(sar.ratio~s.2))
+
+8.7*30*2
+```
+
+
+```{r}
+plot(s.2,sar.ratio, ylab='Surface Area:Volume Ratio', xlab='Sample No.', xaxt='n')
+axis(1, at=0:5, labels= c("Control", "Sample 1", "Sample 2", "Sample 3", "Sample 4", "Sample 5"))  
+abline(1.296552,0, col='red')
+sa.v(S3.MEAN.L,S3.MEAN.H,S3.MEAN.W)
+sa.v(8.7,30,2)
+```
+
+
+```{r}
+anova(lm(w.2~s.2))
+```
+
+
+```{r}
+anova(lm(h.2~s.2))
+```
+
+
+```{r}
+#S1 & S2 are equal lengths. S2 & S4 are equal lengths. S3 is equal in length to S4 & S5. S4 and S5 
+TukeyHSD(aov(l.2~s.2))
+```
+

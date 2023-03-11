@@ -1,0 +1,244 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+rheo <- rheo[1:132,1:5]
+rheo
+```
+
+
+```{r}
+rheo
+```
+
+
+```{r}
+Control1rheo <- rheo[1:11,1:5]
+Control2rheo <- rheo[12:22,1:5]
+Control3rheo <- rheo[23:33,1:5]
+Controlrheo <- rheo[1:33,1:5]
+PF1081rheo <- rheo[34:44,1:5]
+PF1082rheo <- rheo[45:55,1:5,]
+PF1083rheo <- rheo[56:66,1:5]
+PF108rheo <- rheo[34:66,1:5]
+SDS1rheo <- rheo[67:77,1:5]
+SDS2rheo <- rheo[78:88,1:5]
+SDS3rheo <- rheo[89:99,1:5]
+SDSrheo <- rheo[67:99,1:5]
+CTAB1rheo <- rheo[100:110,1:5]
+CTAB2rheo <- rheo[111:121,1:5]
+CTAB3rheo <- rheo[122:132,1:5]
+CTABrheo <- rheo[100:132,1:5]
+HZ.Control1 <- rheo[8,1:5]
+HZ.Control2 <- rheo[19,1:5]
+HZ.Control3 <- rheo[30,1:5]
+HZ.PF108.1  <- rheo[41,1:5]
+HZ.PF108.2  <- rheo[52,1:5]
+HZ.PF108.3  <- rheo[63,1:5]
+HZ.SDS1  <- rheo[74,1:5]
+HZ.SDS2  <- rheo[85,1:5]
+HZ.SDS3  <- rheo[96,1:5]
+HZ.CTAB1  <- rheo[107,1:5]
+HZ.CTAB2  <- rheo[118,1:5]
+HZ.CTAB3  <- rheo[129,1:5]
+```
+
+
+```{r}
+freq <- ((rheo$Angular.Freq)/(2*pi))
+freq
+```
+
+
+
+```{r}
+#par(mfrow=c(1,2))
+plot(rheo$Storage.Modulus,rheo$Loss.Modulus, xlim=c(0,12000), ylim = c(0,1800), type= 'n')
+abline(lm(rheo$Loss.Modulus~rheo$Storage.Modulus), col='red')
+summary(lm(rheo$Loss.Modulus~rheo$Storage.Modulus))
+#points
+points(Control1rheo$Storage.Modulus, Control1rheo$Loss.Modulus, col = 'red')
+points(Control2rheo$Storage.Modulus, Control2rheo$Loss.Modulus, col = 'red', pch=8)
+points(Control3rheo$Storage.Modulus, Control3rheo$Loss.Modulus, col = 'red', pch=2)
+points(PF1081rheo$Storage.Modulus, PF1081rheo$Loss.Modulus, col = 'blue')
+points(PF1082rheo$Storage.Modulus, PF1082rheo$Loss.Modulus, col = 'blue', pch=8)
+points(PF1083rheo$Storage.Modulus, PF1083rheo$Loss.Modulus, col = 'blue', pch=2)
+points(SDS1rheo$Storage.Modulus, SDS1rheo$Loss.Modulus, col = 'dark GREEN')
+points(SDS2rheo$Storage.Modulus, SDS2rheo$Loss.Modulus, col = 'dark GREEN', pch=8)
+points(SDS3rheo$Storage.Modulus, SDS3rheo$Loss.Modulus, col = 'dark GREEN', pch=2)
+points(CTAB1rheo$Storage.Modulus, CTAB1rheo$Loss.Modulus, col = 'purple')
+points(CTAB2rheo$Storage.Modulus, CTAB2rheo$Loss.Modulus, col = 'purple', pch=8)
+points(CTAB3rheo$Storage.Modulus, CTAB3rheo$Loss.Modulus, col = 'purple', pch=2)
+#Angular Freq
+plot(rheo$Storage.Modulus~freq)
+#points(Control1rheo$Storage.Modulus~ Control1rheo$Angular.Freq, col = 'red')
+points(Control2rheo$Storage.Modulus~ (Control2rheo$Angular.Freq/(2*pi)), col = 'red', pch=8)
+points(Control3rheo$Storage.Modulus~ (Control3rheo$Angular.Freq/(2*pi)), col = 'red', pch=2)
+points(PF1081rheo$Storage.Modulus~ (PF1081rheo$Angular.Freq/(2*pi)), col = 'blue')
+points(PF1082rheo$Storage.Modulus~ (PF1082rheo$Angular.Freq/(2*pi)), col = 'blue', pch=8)
+points(PF1083rheo$Storage.Modulus~ (PF1083rheo$Angular.Freq/(2*pi)), col = 'blue', pch=2)
+points(SDS1rheo$Storage.Modulus~(SDS1rheo$Angular.Freq/(2*pi)), col = 'dark GREEN')
+points(SDS2rheo$Storage.Modulus~ (SDS2rheo$Angular.Freq/(2*pi)), col = 'dark GREEN', pch=8)
+points(SDS3rheo$Storage.Modulus~ (SDS3rheo$Angular.Freq/(2*pi)), col = 'dark GREEN', pch=2)
+points(CTAB1rheo$Storage.Modulus~ (CTAB1rheo$Angular.Freq/(2*pi)), col = 'purple')
+points(CTAB2rheo$Storage.Modulus~ (CTAB2rheo$Angular.Freq/(2*pi)), col = 'purple', pch=8)
+points(CTAB3rheo$Storage.Modulus~ (CTAB3rheo$Angular.Freq/(2*pi)), col = 'purple', pch=2)
+
+```
+
+
+```{r}
+tand <- ((rheo$Loss.Modulus)/(rheo$Storage.Modulus))
+cortand <- (tand)
+length(tand)
+length(rheo$Sample)
+#hist(cortand)
+kruskal.test(tand~rheo$Sample)
+kruskalmc(tand~rheo$Sample)
+plot(tand~rheo$Sample, xlim=c(2,13), ylim=c(0,1), ylab='Tan δ')
+plot(tand~rheo$Sample, xlim=c(2,13), ylim=c(0,0.2), ylab='Tan δ')
+interaction.plot(freq,rheo$Sample,tand, type = 'l', lty = (1:12))
+
+contand <- (Controlrheo$Loss.Modulus/Controlrheo$Storage.Modulus)
+length(contand)
+cfreq <- freq[1:33]
+plot(cfreq,contand)
+abline(lm(contand~cfreq))
+```
+
+
+```{r}
+cfreq
+```
+
+
+```{r}
+plot(HZ.Control1$Loss.Modulus~HZ.Control1$Storage.Modulus, xlim=c(0,12000), ylim = c(0,1800))
+points(HZ.Control2$Storage.Modulus,HZ.Control2$Loss.Modulus)
+points(HZ.Control3$Storage.Modulus,HZ.Control3$Loss.Modulus)
+points(HZ.PF108.1$Storage.Modulus,HZ.PF108.1$Loss.Modulus)
+points(HZ.PF108.2$Storage.Modulus,HZ.PF108.2$Loss.Modulus)
+points(HZ.PF108.3$Storage.Modulus,HZ.PF108.3$Loss.Modulus)
+points(HZ.SDS1$Storage.Modulus,HZ.SDS1$Loss.Modulus)
+points(HZ.SDS2$Storage.Modulus,HZ.SDS2$Loss.Modulus)
+points(HZ.SDS3$Storage.Modulus,HZ.SDS3$Loss.Modulus)
+points(HZ.CTAB1$Storage.Modulus,HZ.CTAB1$Loss.Modulus, col='red')
+points(HZ.CTAB2$Storage.Modulus,HZ.CTAB2$Loss.Modulus,col='red')
+points(HZ.CTAB3$Storage.Modulus,HZ.CTAB3$Loss.Modulus, col='red')
+```
+
+
+```{r}
+
+anova(lm(rheo$Storage.Modulus~rheo$Sample))
+
+```
+
+
+```{r}
+f2 <- ANOVA.GEL.RHEO.1.99.gen[1:12,1:5]
+
+
+CSMF <- c(HZ.Control1$Storage.Modulus, HZ.Control2$Storage.Modulus, HZ.Control3$Storage.Modulus)
+CLMF <- c(HZ.Control1$Loss.Modulus,HZ.Control2$Loss.Modulus,HZ.Control3$Loss.Modulus)
+PSMF <- c(HZ.PF108.1$Storage.Modulus,HZ.PF108.2$Storage.Modulus,HZ.PF108.3$Storage.Modulus)
+PLMF <- c(HZ.PF108.1$Loss.Modulus,HZ.PF108.2$Loss.Modulus,HZ.PF108.3$Loss.Modulus)
+SSMF <- c(HZ.SDS1$Storage.Modulus, HZ.SDS2$Storage.Modulus, HZ.SDS3$Storage.Modulus)
+SLMF <- c(HZ.SDS1$Loss.Modulus, HZ.SDS2$Loss.Modulus, HZ.SDS3$Loss.Modulus)
+TSMF <- c(HZ.CTAB1$Storage.Modulus, HZ.CTAB2$Storage.Modulus, HZ.CTAB3$Storage.Modulus)
+TLMF <- c(HZ.CTAB1$Loss.Modulus, HZ.CTAB2$Loss.Modulus, HZ.CTAB3$Loss.Modulus)
+
+sf <- c(CSMF, PSMF, SSMF, TSMF)
+lf <- c(CLMF, PLMF, SLMF, TLMF)
+groups <- c(1:12)
+groups.f <- as.factor(groups)
+
+sf
+plot(sf,lf, ylab='Loss Modulus', xlab='Storage Modulus')
+```
+
+
+```{r}
+anova(lm(f2$Storage.Modulus~f2$Sample))
+summary(lm(f2$Storage.Modulus~f2$Sample))
+TukeyHSD(aov(f2$Storage.Modulus~f2$Sample))
+plot(f2$Storage.Modulus~f2$Sample)
+anova(lm(f2$Loss.Modulus~f2$Sample))
+TukeyHSD(aov(f2$Loss.Modulus~f2$Sample))
+anova(lm(f2$Complex.Visc~f2$Sample))
+TukeyHSD(aov(f2$Complex.Visc~f2$Sample))
+```
+
+
+```{r}
+means <- tapply(rheo$Storage.Modulus, rheo$Sample, mean)
+xst <- c(3569.091,4108.182,6355.455,10191.818, 8392.727,9658.182,8055.455,5465.455,6621.818,5414.545,8054.545,6795.455)
+yst <- c('Control 1',' Control 2','Control 3','CTAB 1','CTAB 2','CTAB 3','PF108 1','PF108 2',   'PF108 3',     'SDS 1','SDS 2', 'SDS 3'  )
+plot(xst,yst, ylim=c(0,10000))
+
+anova(lm(yst~xst))
+```
+
+
+```{r}
+anova(lm(rheo$Loss.Modulus~rheo$Sample))
+TukeyHSD(aov(rheo$Loss.Modulus~rheo$Sample))
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+hist(Controlrheo$Storage.Modulus)
+shapiro.test(log10(Controlrheo$Storage.Modulus))
+anova((lm((log10(Controlrheo$Storage.Modulus))~Controlrheo$Sample)))
+TukeyHSD(aov((log10(Controlrheo$Storage.Modulus))~Controlrheo$Sample))
+```
+
+
+```{r}
+hist(Controlrheo$Loss.Modulus)
+shapiro.test(1/(Controlrheo$Loss.Modulus))
+anova((lm((1/(Controlrheo$Loss.Modulus))~Controlrheo$Sample)))
+TukeyHSD(aov((1/(Controlrheo$Loss.Modulus))~Controlrheo$Sample))
+```
+
+
+```{r}
+#hist(PF108rheo$Storage.Modulus)
+shapiro.test((PF108rheo$Storage.Modulus))
+anova((lm(((PF108rheo$Storage.Modulus))~PF108rheo$Sample)))
+TukeyHSD(aov(((PF108rheo$Storage.Modulus))~PF108rheo$Sample))
+```
+
+
+```{r}
+#hist(SDSrheo$Storage.Modulus)
+shapiro.test((SDSrheo$Storage.Modulus))
+anova(lm(SDSrheo$Storage.Modulus~SDSrheo$Sample))
+TukeyHSD(aov(SDSrheo$Storage.Modulus~SDSrheo$Sample))
+```
+
+
+```{r}
+#hist(SDSrheo$Loss.Modulus)
+shapiro.test((SDSrheo$Loss.Modulus))
+anova(lm(SDSrheo$Loss.Modulus~SDSrheo$Sample))
+TukeyHSD(aov(SDSrheo$Loss.Modulus~SDSrheo$Sample))
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+

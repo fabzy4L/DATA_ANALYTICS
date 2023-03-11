@@ -1,0 +1,90 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+CellViabilityAssay <- read.csv('/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/PHD_DISSERTATION/RMD Files PhD/R stats PHD projects/CellViabilityAssay.csv')
+```
+
+
+```{r}
+CellViabilityAssay
+```
+
+
+```{r}
+#as.character()
+
+library(dplyr)
+PERCENT <- as.character(CellViabilityAssay[,2])
+group1 <- c('0.5% ZnO', '0.5% ZnO', '1% ZnO', '1% ZnO', 'Alginate', 'Control','1% TiO2', '0.5% ZnO', '0.5% ZnO', '1% ZnO', '1% ZnO', 'Alginate', 'Control', '1% TiO2')
+group2 <- c('LIVE', 'LIVE', 'LIVE', 'LIVE', 'LIVE','LIVE','LIVE', 'DEAD','DEAD','DEAD','DEAD','DEAD','DEAD','DEAD')
+
+```
+
+
+```{r}
+newdata <- as.data.frame(group1, group2,PERCENT)
+```
+
+
+```{r}
+class(PERCENT)
+```
+
+
+```{r}
+TREATMENT <- c('0.5% ZnO', '0.5% ZnO', '1% ZnO', '1% ZnO', 'Alginate', 'Control','1% TiO2', '0.5% ZnO', '0.5% ZnO', '1% ZnO', '1% ZnO', 'Alginate', 'Control', '1% TiO2')
+CONDITION <- c('LIVE', 'LIVE', 'LIVE', 'LIVE', 'LIVE','LIVE','LIVE', 'DEAD','DEAD','DEAD','DEAD','DEAD','DEAD','DEAD')
+
+
+df1 <- data.frame(TREATMENT,CONDITION,PERCENT)
+df1$PERCENT <- as.numeric(df1$PERCENT)
+df1
+```
+
+
+```{r}
+live <- df1[1:7,]
+dead <- df1[8:14,]
+live
+```
+
+
+```{r}
+# 0.5% ZnO	DEAD 26.9663
+# 1.0% ZnO	DEAD 11.5584
+#Alginate	DEAD	10.13510	
+#Control	DEAD	9.94152	
+# 1.0% TiO2	DEAD	6.60377	
+176.8831/2
+
+# 0.5% ZnO	LIVE 73.1335
+# 1.0% ZnO	LIVE 88.44155
+#	Alginate	LIVE	89.8649	
+#	Control	LIVE	90.0585	
+#	1.0% TiO2	LIVE	93.3962	
+
+
+TREATMENT2 <- c('0.5% ZnO','1% ZnO', 'Alginate', 'Control','1% TiO2', '0.5% ZnO', '1% ZnO', 'Alginate', 'Control', '1% TiO2')
+CONDITION2 <- c('DEAD','DEAD','DEAD','DEAD','DEAD','LIVE', 'LIVE', 'LIVE','LIVE','LIVE')
+PERCENT2 <- c(26.9663,11.5584,10.13510,9.94152,6.60377,73.1335,88.44155,89.8649,90.0585,93.3962)
+
+df3 <- data.frame(TREATMENT2,CONDITION2,PERCENT2)
+
+dead2<- df3[1:5,]
+live2 <- df3[6:10,]
+
+live2
+```
+
+
+```{r}
+interaction.plot(TREATMENT2,CONDITION2,PERCENT2)
+#chisq.test()
+```

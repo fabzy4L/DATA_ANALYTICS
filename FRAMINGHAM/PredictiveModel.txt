@@ -1,0 +1,42 @@
+Predictive Model
+
+# Load required libraries
+library(Framingham)  # Install and load the 'Framingham' package
+library(caTools)    # Install and load the 'caTools' package for data splitting
+
+# Load the Framingham dataset
+data(Framingham)
+
+# Remove rows with missing values
+Framingham <- na.omit(Framingham)
+
+# Data preprocessing
+# Select relevant predictors and the outcome variable
+predictors <- c("age", "sex", "cigsPerDay", "totChol", "sysBP", "diabetes", "BMI", "heartRate")
+outcome <- "TenYearCHD"
+data <- Framingham[, c(predictors, outcome)]
+
+# Split the data into training and testing sets
+set.seed(123)  # Set seed for reproducibility
+split <- sample.split(data$TenYearCHD, SplitRatio = 0.7)  # 70% for training, 30% for testing
+train <- data[split, ]
+test <- data[!split, ]
+
+# Build a logistic regression model
+model <- glm(TenYearCHD ~ ., data = train, family = binomial)
+
+# Make predictions on the testing set
+predictions <- predict(model, newdata = test, type = "response")
+predicted_classes <- ifelse(predictions >= 0.5, 1, 0)
+
+# Evaluate the model performance
+confusion_matrix <- table(predicted_classes, test$TenYearCHD)
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+sensitivity <- confusion_matrix[2, 2] / sum(confusion_matrix[2, ])
+specificity <- confusion_matrix[1, 1] / sum(confusion_matrix[1, ])
+
+# Print model performance metrics
+cat("Model Performance Metrics:\n")
+cat("Accuracy:", accuracy, "\n")
+cat("Sensitivity (True Positive Rate):", sensitivity, "\n")
+cat("Specificity (True Negative Rate):", specificity, "\n")

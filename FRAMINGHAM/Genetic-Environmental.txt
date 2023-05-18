@@ -1,0 +1,21 @@
+Genetic & Environmental Factors
+
+# Load required libraries
+library(Framingham)  # Install and load the 'Framingham' package
+
+# Load the Framingham dataset
+data(Framingham)
+
+# Remove rows with missing values
+Framingham <- na.omit(Framingham)
+
+# Calculate genetic and environmental factors
+
+# 1. Genetic Factor: Family History
+Framingham$familyHistory <- ifelse(Framingham$prevalentStroke == 1 | Framingham$prevalentHyp == 1 | Framingham$diabetesParents == 1, 1, 0)
+
+# 2. Environmental Factor: Physical Activity
+Framingham$physicalActivity <- ifelse(Framingham$totChol >= 200 & Framingham$BMI >= 25 & Framingham$diabetes == 0 & Framingham$heartRate >= 60 & Framingham$heartRate <= 100, 1, 0)
+
+# Print the modified dataset with calculated factors
+print(Framingham)

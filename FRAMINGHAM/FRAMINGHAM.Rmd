@@ -8,7 +8,8 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
 
 ```{r}
-framingham
+framingham <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/FRAMINGHAM_DATAFRAME.csv")
+framingham2 <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/framingham.csv")
 ```
 
 ```{r}

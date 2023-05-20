@@ -11,7 +11,7 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 
 ```{r}
 #Question 1
-mammals <- read.csv('/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/BIOSTATISTICS_COURSE_PROJECTS/mammals.csv')
+mammals <- read.csv(text = getURL('https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/BIOSTATISTICS_COURSE_PROJECTS/mammals.csv'))
 
 name <- mammals$name
 body.mass..kg. <- mammals$body.mass..kg.

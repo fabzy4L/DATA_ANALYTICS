@@ -1,0 +1,41 @@
+---
+title: "Forecast"
+output: html_notebook
+---
+
+
+```{r}
+
+# Load the required packages
+install.packages("forecast")
+library(forecast)
+
+# Set the seed for reproducibility
+set.seed(123)
+
+# Generate the time series data
+n <- 60  # Number of data points
+ts_data <- ts(rnorm(n), start = c(2010, 1), frequency = 12)
+
+# Generate a seasonal component
+seasonality <- sin(2 * pi * (1:n)/12)
+
+# Add the seasonal component to the data
+ts_data <- ts_data + seasonality
+
+# Add a linear trend
+trend <- 0.5 * (1:n)
+ts_data <- ts_data + trend
+
+# Add some random noise
+noise <- rnorm(n)
+ts_data <- ts_data + noise
+
+# Visualize the generated time series data
+plot(ts_data, main = "Generated Time Series Data", xlab = "Year-Month", ylab = "Value")
+
+# Save the generated data to a CSV file
+data <- data.frame(Value = ts_data)
+write.csv(data, "time_series_data.csv", row.names = FALSE)
+
+```

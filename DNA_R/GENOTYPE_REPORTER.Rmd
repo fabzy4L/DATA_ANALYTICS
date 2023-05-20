@@ -12,8 +12,8 @@ library(tidyverse)
 library(biomaRt)
 
 
-dna <- read.csv(text = getURL("https://raw.githubusercontent.com/fabzy4L/RStudioDataAnalysis/Main/DNA/AlvarezPrimo_MyHeritage_Raw_DNA.csv") )
-pgx <- read.csv(text = getURL("https://raw.githubusercontent.com/fabzy4L/RStudioDataAnalysis/Main/DNA/pgx_genes.csv"), stringsAsFactors = TRUE )
+dna <- read.csv(text = getURL("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/DNA_R/AlvarezPrimo_MyHeritage_Raw_DNA.csv") )
+pgx <- read.csv(text = getURL("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/DNA_R/pgx_genes.csv"), stringsAsFactors = TRUE )
 
 
 dna <- dna[7:720822,]

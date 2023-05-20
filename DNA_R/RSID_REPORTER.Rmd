@@ -1,0 +1,53 @@
+---
+title: "RSID_REPORTER"
+output: html_notebook
+---
+
+```{r}
+library(data.table)
+library(RCurl)
+library(randomForest)
+library(dplyr)
+library(tidyverse)
+library(biomaRt)
+
+
+#dna <- read.csv(text = getURL("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/DNA_R/AlvarezPrimo_MyHeritage_Raw_DNA.csv") )
+dna <- read.csv("/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/R_SHINY_PROJECTS/rsid200.csv")
+
+#dna <- dna[7:720822,]
+
+dna1 <- dna[1:1000,]
+
+#listMarts()
+#select a mart to obtain dataset
+ensembl <- useMart("ENSEMBL_MART_SNP")
+
+#Dataset obtained
+#listDatasets(ensembl)
+#Choose Mart & Dataset so we can set filters
+ensembl=useMart("ENSEMBL_MART_SNP", dataset= "hsapiens_snp")
+#create filter list so we can check criteria
+myfilters <- listFilters(ensembl)
+
+#Make a vector for the filter 
+filter1 <- 'snp_filter'
+
+#Attributes
+attributes1 <- listAttributes(ensembl)
+att1 <- c('refsnp_id','snp','allele','chr_name', 'minor_allele', 'minor_allele_freq','associated_gene','phenotype_description' )
+
+
+searchResults <- getBM(attributes=att1,
+                       filters=filter1,
+                       values=dna1, mart=ensembl)
+```
+
+
+
+```{r}
+#Export Data
+
+write.csv(searchResults, file='/Users/f4L/Documents/GitHub/RStudioDataAnalysis/DNA/rsid_srd1.csv',row.names=FALSE,na='', quote=FALSE)
+
+```

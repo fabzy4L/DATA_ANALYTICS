@@ -8,7 +8,7 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
 
 ```{r}
-iris <- read.csv('/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/BIOSTATISTICS_COURSE_PROJECTS/iris.csv')
+iris <- read.csv(text = getURL('https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/BIOSTATISTICS_COURSE_PROJECTS/iris.csv'))
 iris
 ```
 

@@ -4,7 +4,7 @@ output: html_notebook
 ---
 
 ```{r}
-coatings <- read.csv('/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/BIOSTATISTICS_COURSE_PROJECTS/coatings.csv')
+coatings <- read.csv(text = getURL('https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/BIOSTATISTICS_COURSE_PROJECTS/coatings.csv'))
 coatings
 ```
 

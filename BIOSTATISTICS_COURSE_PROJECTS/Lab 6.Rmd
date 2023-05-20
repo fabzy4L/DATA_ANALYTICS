@@ -4,7 +4,7 @@ output: html_notebook
 ---
 
 ```{r}
-telomere.inheritance <- read.csv('/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/BIOSTATISTICS_COURSE_PROJECTS/telomere inheritance.csv')
+telomere.inheritance <- read.csv(text = getURL('https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/BIOSTATISTICS_COURSE_PROJECTS/telomere inheritance.csv'))
 father.telomere.length<-telomere.inheritance$father.telomere.length
 offspring.telomere.length<-telomere.inheritance$offspring.telomere.length
 

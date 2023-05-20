@@ -5,7 +5,7 @@ output: html_notebook
 
 ```{r}
 #1. Daphnia
-daphnia <- read.csv('/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/BIOSTATISTICS_COURSE_PROJECTS/daphnia.csv')
+daphnia <- read.csv(text = getURL('https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/BIOSTATISTICS_COURSE_PROJECTS/daphnia.csv'))
 cyandensity <- daphnia$cyandensity
 resistance <- daphnia$resistance
   

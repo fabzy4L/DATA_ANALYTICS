@@ -11,7 +11,7 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 
 ```{r}
 library(car)
-sfdf <- read.csv('/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/BIOSTATISTICS_COURSE_PROJECTS/SantaFe.csv')
+sfdf <- read.csv(text = getURL('https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/BIOSTATISTICS_COURSE_PROJECTS/SantaFe.csv'))
 scatterplot(Monthly.discharge.m3.S~Monthly.precip.mm, regLine=TRUE, 
   smooth=FALSE, boxplots=FALSE, xlab="Precipitation", ylab="Discharge", 
   data=sfdf)

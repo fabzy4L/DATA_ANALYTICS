@@ -33,7 +33,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   # Load data
-  outbreak <- read.csv("/Users/f4L/Documents/GitHub/RStudioDataAnalysis/EPIDEMIOLOGY-COV19-SHINY/outbreak.csv")
+  outbreak <- read.csv(text = getURL("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/EPIDEMIOLOGY_COV19_SHINY/outbreak.csv"))
   outbreak$Region <- factor(outbreak$Region)
   
   # Filter data based on user input

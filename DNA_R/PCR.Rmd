@@ -8,8 +8,11 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
 
 ```{r}
+
 # Load the openPrimeR package
 library(openPrimeR)
+#install.packages('pcr')
+#library(pcr)
 
 # Load example gene expression data
 data(mtcars)
@@ -50,12 +53,33 @@ pcr_lm <- as.lm(pcr_result)
 
 # View the results
 validationplot(pcr_lm, legend.position = "bottomright")
+
 ```
 
 
 ```{r}
-class(gene_expr)
-class(outcome)
+# Load the pls package
+library(pls)
+
+# Load example gene expression data
+data(mtcars)
+
+# Extract gene expression data and outcome variable
+gene_expr <- as.matrix(mtcars[, 2:11])
+outcome <- mtcars$am
+
+# Convert the outcome variable to a factor
+outcome <- factor(outcome)
+
+# Define the formula for the response variable
+response_formula <- formula(paste("am ~", paste(colnames(gene_expr), collapse = "+")))
+
+# Perform PLS analysis with 10-fold cross-validation
+pls_result <- plsr(response_formula, data = data.frame(gene_expr, outcome), validation = "CV", segments = 10)
+
+# View the results
+summary(pls_result)
+plot(pls_result)
 
 ```
 

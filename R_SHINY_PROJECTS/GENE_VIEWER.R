@@ -9,7 +9,7 @@ library(DT)
 # Define UI layout
 ui <- fluidPage(theme = shinytheme("cosmo"),  
                 titlePanel(
-                  h1("GENE EXPRESSION MAP")
+                  h1("GENOMICS TOOLS")
                 ),
                 navbarPage(
                   "Genomic Testing",

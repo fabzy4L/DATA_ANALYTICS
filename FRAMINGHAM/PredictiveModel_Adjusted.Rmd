@@ -1,0 +1,68 @@
+---
+title: "Framingham"
+output: html_notebook
+---
+
+```{r}
+#install.packages("caTools")  # Install the caTools package
+#library(caTools)  # Load the caTools package
+```
+
+
+```{r}
+# Load the Framingham dataset
+Framingham <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/FRAMINGHAM_DATAFRAME.csv")
+
+# Remove rows with missing values
+Framingham <- na.omit(Framingham)
+
+
+# Select relevant columns for prevalence calculation
+prevalence_data <- Framingham[c("sex", "totchol", "age", "sysbp", "diabp", "cursmoke", "cigpday", "bmi", "diabetes", "bpmeds", "prevchd")]
+
+# Calculate the prevalence of CHD
+chd_prevalence <- sum(prevalence_data$prevchd == 1) / nrow(prevalence_data)
+
+# Print the calculated prevalence
+cat("Prevalence of Coronary Heart Disease (CHD):", chd_prevalence, "\n")
+
+```
+
+
+```{r}
+# Data preprocessing
+
+# Select relevant predictors and the outcome variable
+predictors <- c("age", "sex", "cigpday", "totchol", "sysbp", "diabetes", "bmi", "heartrte")
+outcome <- "prevchd"  # Assuming this variable represents the presence of CHD in your dataset
+
+data <- Framingham[, c(predictors, outcome)]
+
+# Split the data into training and testing sets
+set.seed(123)  # Set seed for reproducibility
+split <- sample.split(data$prevchd, SplitRatio = 0.7)  # 70% for training, 30% for testing
+train <- data[split, ]
+test <- data[!split, ]
+
+# Build a logistic regression model
+model <- glm(prevchd ~ ., data = train, family = binomial)
+
+# Make predictions on the testing set
+predictions <- predict(model, newdata = test, type = "response")
+predicted_classes <- ifelse(predictions >= 0.5, 1, 0)
+
+# Evaluate the model performance
+confusion_matrix <- table(predicted_classes, test$prevchd)
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+sensitivity <- confusion_matrix[2, 2] / sum(confusion_matrix[2, ])
+specificity <- confusion_matrix[1, 1] / sum(confusion_matrix[1, ])
+
+# Print model performance metrics
+cat("Model Performance Metrics:\n")
+cat("Accuracy:", accuracy, "\n")
+cat("Sensitivity (True Positive Rate):", sensitivity, "\n")
+cat("Specificity (True Negative Rate):", specificity, "\n")
+```
+
+
+

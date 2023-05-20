@@ -1,0 +1,25 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("Gviz")
+BiocManager::install("RCircos")
+BiocManager::install("ComplexHeatmap")
+
+# Example karyotype data (chromosome lengths)
+chromosome_lengths <- c(249250621, 243199373, 198022430, 191154276, 180915260)
+
+# Create a karyotype plot
+plot(1:length(chromosome_lengths), chromosome_lengths, type = "h", ylim = c(0, max(chromosome_lengths)),
+     xlab = "Chromosome", ylab = "Length", main = "Karyotype Plot")
+
+```
+

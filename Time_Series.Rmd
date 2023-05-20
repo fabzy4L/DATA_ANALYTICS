@@ -1,0 +1,102 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+# Load the required packages
+#install.packages("forecast")
+#install.packages("urca")
+library(forecast)
+library(urca)
+```
+
+
+```{r}
+data
+```
+
+```{r}
+
+# Read the time series data from a CSV file
+data <- read.csv("/Users/f4L/Documents/GitHub/DATA_ANALYSIS/DATA_ANALYTICS/time_series_data.csv")
+
+# Convert the data into a time series object
+ts_data <- ts(data$Value, start = c(2010, 1), frequency = 12)
+
+# Explore the data
+plot(ts_data, main = "Time Series Data", xlab = "Year-Month", ylab = "Value")
+
+
+```
+
+
+
+
+```{r}
+# ... Your code to generate or read the time series data ...
+
+# Perform the ADF test
+adf_test <- ur.df(ts_data, type = "trend")
+
+# Extract the test results
+summary(adf_test)
+```
+
+
+```{r}
+# Decompose the time series
+decomp <- decompose(ts_data)
+plot(decomp)
+
+# Select and fit a time series model (e.g., ARIMA)
+model <- auto.arima(ts_data)
+
+# Generate forecasts
+forecast <- forecast(model, h = 12)  # Forecasting for 12 time periods
+
+# Visualize the forecasts
+plot(forecast, main = "Time Series Forecast", xlab = "Year-Month", ylab = "Value")
+
+# Evaluate the model's accuracy
+accuracy(forecast)
+
+
+```
+
+
+```{r}
+# Decompose the time series
+decomp <- decompose(ts_data)
+plot(decomp)
+
+# Fit a SARIMA model
+model <- auto.arima(ts_data, seasonal = TRUE)
+
+# Generate forecasts
+forecast <- forecast(model, h = 12)  # Forecasting for 12 time periods
+
+# Visualize the forecasts
+plot(forecast, main = "Time Series Forecast", xlab = "Year-Month", ylab = "Value")
+
+# Evaluate the model's accuracy
+accuracy(forecast)
+```
+
+
+```{r}
+
+# Update the model with new data (if available)
+new_data <- read.csv("new_time_series_data.csv")
+new_ts_data <- ts(new_data$Value, start = c(2010, 1), frequency = 12)
+updated_model <- Arima(new_ts_data, model)
+
+# Generate updated forecasts
+updated_forecast <- forecast(updated_model, h = 12)
+
+# Visualize the updated forecasts
+plot(updated_forecast, main = "Updated Time Series Forecast", xlab = "Year-Month", ylab = "Value")
+
+```
+
+

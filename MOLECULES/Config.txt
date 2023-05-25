@@ -1,4 +1,3 @@
-
 # AutoDock Configuration File
 [receptor]
 receptor_file = cb1_receptor.pdbqt

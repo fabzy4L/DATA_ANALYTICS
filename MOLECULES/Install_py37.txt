@@ -1,0 +1,59 @@
+Install python 3.7 in mac os terminal
+
+To install Python 3.7 on macOS using the terminal, you can follow these steps:
+
+1. Open the Terminal: You can open the Terminal by going to Finder -> Applications -> Utilities -> Terminal.
+
+2. Check if Homebrew is installed: Homebrew is a package manager for macOS that simplifies the installation of software packages. To check if Homebrew is installed, enter the following command in the Terminal:
+
+   ```
+   brew --version
+   ```
+
+   If Homebrew is not installed, you can install it by following the instructions on the Homebrew website: https://brew.sh/
+
+3. Install Python 3.7: Once Homebrew is installed, you can use it to install Python 3.7. In the Terminal, enter the following command:
+   ```
+   brew install python@3.7
+   ```
+
+Homebrew will download and install Python 3.7 on your system.
+
+4. Verify the installation: After the installation is complete, you can verify that Python 3.7 is installed by checking its version. Enter the following command in the Terminal:
+   ```
+   python3.7 --version
+   ```
+
+   If Python 3.7 is successfully installed, it will display the version number.
+
+That's it! You have now installed Python 3.7 on your macOS system using the Terminal. You can use `python3.7` command to run Python 3.7 scripts or `pip3.7` command to install packages specifically for Python 3.7.
+
+To select between Python 3.7 and Python 3.11 in the terminal on macOS, you can use the `python3` command followed by the specific version number.
+
+1. Open the Terminal: Go to Finder -> Applications -> Utilities -> Terminal to open the Terminal.
+
+2. Check available Python versions: You can check the available Python versions by running the following command:
+
+   ```
+   ls /usr/bin/python*
+   ```
+
+   This will list all the installed Python versions on your system.
+
+3. Run Python 3.7: To run Python 3.7, you can use the following command:
+
+   ```
+   python3.7
+   ```
+
+   This will launch the Python 3.7 interpreter, and you can now run Python 3.7 code.
+
+4. Run Python 3.11: To run Python 3.11, you can use the following command:
+
+   ```
+   python3.11
+   ```
+
+   This will launch the Python 3.11 interpreter, and you can run Python 3.11 code.
+
+By specifying the version number after the `python3` command, you can select the desired Python version to run in the terminal.

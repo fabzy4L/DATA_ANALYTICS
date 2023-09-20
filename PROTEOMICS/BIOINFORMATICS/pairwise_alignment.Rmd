@@ -1,0 +1,137 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+# Load necessary libraries
+library(Biostrings)
+library(seqinr)
+```
+
+
+```{r}
+# Example sequences
+dna_sequence1 <- DNAString("ATCGATCGATCG")
+dna_sequence2 <- DNAString("ATCGAGCGATCG")
+protein_sequence <- AAString("MASTPKDLAIVT")
+```
+
+
+```{r}
+# Define the substitution matrix for DNA sequences
+substitution_matrix <- matrix(c(1, -1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, -1, -1, 1), nrow = 4)
+rownames(substitution_matrix) <- colnames(substitution_matrix) <- c("A", "T", "C", "G")
+
+# Sequence Alignment (Pairwise)
+pairwise_alignment <- pairwiseAlignment(dna_sequence1, dna_sequence2, substitutionMatrix = substitution_matrix)
+```
+
+
+```{r}
+install.packages("BiocManager")
+#BiocManager::install("msaR").
+
+```
+
+
+```{r}
+# Multiple Sequence Alignment
+multi_alignment_sequences <- c("ATCGATCGATCG", "ATCGAGCGATCG", "AGCGTACGATCG")
+multi_alignment <- muscle(multi_alignment_sequences, matrix = substitution_matrix)
+
+```
+
+
+```{r}
+# Sequence Databases
+# Accessing NCBI Nucleotide Database requires web queries, which is beyond the scope of this script.
+# UniProt access is also not covered here.
+
+# Sequence Manipulation
+# Finding Motifs using regular expressions
+motif_pattern <- "CGAT"  # Example motif pattern
+matches <- regexpr(motif_pattern, as.character(dna_sequence1))
+motif_positions <- attr(matches, "match.length") > 0
+motif_positions <- which(motif_positions)
+```
+
+
+```{r}
+# Calculating GC Content
+gc_content <- function(sequence) {
+  gc_count <- sum(sequence == "G" | sequence == "C")
+  total_bases <- length(sequence)
+  gc_percentage <- (gc_count / total_bases) * 100
+  return(gc_percentage)
+}
+
+
+dna_gc_content <- gc_content(as.character(dna_sequence1))
+```
+
+
+```{r}
+# Identifying Open Reading Frames (ORFs)
+find_orfs <- function(sequence) {
+  start_codon <- "ATG"
+  stop_codons <- c("TAA", "TAG", "TGA")
+  
+  start_positions <- regexpr(start_codon, sequence)
+  start_positions <- start_positions[start_positions > 0]
+  
+  orf_positions <- vector("list", length(start_positions))
+  
+  for (i in seq_along(start_positions)) {
+    start_pos <- start_positions[i]
+    stop_pos <- min(start_pos + 3 * (nchar(sequence) / 3), nchar(sequence))
+    
+    for (stop_codon in stop_codons) {
+      stop_position <- regexpr(stop_codon, sequence, start = start_pos)
+      if (stop_position > 0) {
+        orf_positions[[i]] <- c(start_pos, stop_position + 2)
+        break
+      }
+    }
+  }
+  
+  orf_positions <- unlist(orf_positions, use.names = FALSE)
+  return(orf_positions)
+}
+
+
+orf_positions <- find_orfs(as.character(dna_sequence1))
+```
+
+
+```{r}
+# Printing results
+cat("Pairwise Alignment Score:", pairwise_alignment@score, "\n")
+cat("Multiple Sequence Alignment:\n")
+print(multi_alignment)
+cat("DNA GC Content:", dna_gc_content, "%\n")
+cat("ORF Positions:", orf_positions, "\n")
+```
+
+
+```{r}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("msa")
+```
+
+
+```{r}
+# Printing results
+cat("DNA GC Content:", dna_gc_content, "%\n")
+cat("ORF Positions:", orf_positions, "\n")
+
+# Visualization using msa package (Note: This package doesn't perform the alignment)
+sequences <- c(dna_sequence1, dna_sequence2)
+msa_object <- msa(sequences)
+plot(msa_object)
+```
+
+

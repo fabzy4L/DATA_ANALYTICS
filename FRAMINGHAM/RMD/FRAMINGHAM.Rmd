@@ -7,15 +7,19 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
 
-```{r}
-framingham <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/FRAMINGHAM_DATAFRAME.csv")
-framingham2 <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/framingham.csv")
+```{r} 
+framingham <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/CSV/FRAMINGHAM_DATAFRAME.csv")
+framingham2 <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/CSV/framingham.csv")
 ```
 
 ```{r}
 # 2. WHAT IS THE PREVALENCE OF CHD 
 prevchd <- framingham$prevchd
-#prevchd
+```
+
+
+```{r}
+prevchd
 CHD <- sum(prevchd)
 CHD
 CHD/4434*100
@@ -93,6 +97,7 @@ chisq.test(test)
 #b = Number of dead non-cases
 #c = Number of alive htn
 #d = Number of alive non-cases
+
 #OR=a*d/b*c
 
 

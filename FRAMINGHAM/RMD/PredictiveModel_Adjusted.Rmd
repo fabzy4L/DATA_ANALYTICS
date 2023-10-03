@@ -11,13 +11,20 @@ library(caTools)  # Load the caTools package
 
 ```{r}
 # Load the Framingham dataset
-Framingham <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/FRAMINGHAM_DATAFRAME.csv")
-framingham2 <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/framingham.csv")
+Framingham <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/CSV/FRAMINGHAM_DATAFRAME.csv")
+framingham2 <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/FRAMINGHAM/CSV/framingham.csv")
 
 # Remove rows with missing values
 Framingham <- na.omit(Framingham)
+```
 
 
+```{r}
+framingham2
+```
+
+
+```{r}
 # Select relevant columns for prevalence calculation
 prevalence_data <- Framingham[c("sex", "totchol", "age", "sysbp", "diabp", "cursmoke", "cigpday", "bmi", "diabetes", "bpmeds", "prevchd")]
 
@@ -67,7 +74,6 @@ cat("Specificity (True Negative Rate):", specificity, "\n")
 
 
 ```{r}
-
 # w dataset2
 framingham2
 # Remove rows with missing values
@@ -75,7 +81,10 @@ Framingham2 <- na.omit(framingham2)
 
 # Calculate the prevalence of CHD
 chd_prevalence <- sum(Framingham2$TenYearCHD == 1) / nrow(Framingham2)
+```
 
+
+```{r}
 # Print the calculated prevalence
 cat("Prevalence of Coronary Heart Disease (CHD):", chd_prevalence, "\n")
 ```

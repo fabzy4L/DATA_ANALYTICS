@@ -1,3 +1,5 @@
+#https://www.convertcsv.com/csv-to-sql.htm
+
 CREATE TABLE VDSgenes(
     id SERIAL PRIMARY KEY
    SPECIES VARCHAR(10) NOT NULL

@@ -69,11 +69,11 @@ fx_prot <- function(protein,m,b) {
 
 
 ```{r}
-EPX040 <- read.csv("/Users/f4L/Documents/GitHub/RStudioDataAnalysis/PROTEOMICS BIOSTATISTICS/dfc_EPX040.csv")
-#EPX040 <- read.csv("E:/R STUDIO/LUM PLATES/dfc_EPX040.csv")
+#EPX040 <- read.csv("/Users/f4L/Documents/GitHub/RStudioDataAnalysis/PROTEOMICS BIOSTATISTICS/dfc_EPX040.csv")
+EPX040 <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/PROTEOMICS/dfc_EPX040.csv")
 EPX040
-EPX110 <- read.csv("/Users/f4L/Documents/GitHub/RStudioDataAnalysis/PROTEOMICS BIOSTATISTICS/dfc_EPX110.csv")
-#EPX110 <- read.csv("E:/R STUDIO/LUM PLATES/dfc_EPX110.csv")
+#EPX110 <- read.csv("/Users/f4L/Documents/GitHub/RStudioDataAnalysis/PROTEOMICS BIOSTATISTICS/dfc_EPX110.csv")
+EPX110 <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/PROTEOMICS/dfc_EPX110.csv")
 EPX110
 ```
 
@@ -157,8 +157,6 @@ S040_s <- S040[order(S040$DX),] # CNTF / GFAP / NFH / UCHL1
  
 ```
 
-
-
 ```{r}
 # % OF PROTEINS AVAILABLE TO STUDY: (Cols >30% NAs removed)
 
@@ -189,12 +187,21 @@ S110$EGF_Net_MFI
 
 #view the output of the model
 summary(GFAP_log)
+```
 
 
+```{r}
 STD040$GFAP_Net_MFI
-S040$GFAP_Net_MFI
+```
 
-gfap_ln_y = 2436.6*(log(S040$GFAP_Net_MFI)) -13279.4
+
+```{r}
+S040$GFAP_Net_MFI
+```
+
+
+```{r}
+gfap_ln_y = (2436.6*(log(S040$GFAP_Net_MFI)))-13279.4
 gfap_ln_y
 
 ```

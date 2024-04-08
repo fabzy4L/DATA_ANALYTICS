@@ -6,25 +6,168 @@ output: html_notebook
 ```{r}
 ##In R, when specifying file paths with backslashes, you need to escape the backslashes or use forward slashes. Here's how you can fix the file path:
 
-data <- read.csv("C:\\Users\\Fabian Alvarez-Primo\\Documents\\Github\\DATA_ANALYTICS\\R_NOTEBOOKS\\MISC_DATA\\april2024.csv")
+address <- c("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/R_NOTEBOOKS/MISC_DATA/april2024.csv")
+address2 <- c("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/R_NOTEBOOKS/MISC_DATA/march2024.csv")
+
+df <- read.csv(address)
+df2 <- read.csv(address2)
+#localmachine
+
+#df <- read.csv("C:/Users/Fabian #Alvarez-Primo/Documents/Github/DATA_ANALYTICS/R_NOTEBOOKS/MISC_DATA/april2024.csv")
+#df <- read.csv("C:\\Users\\Fabian Alvarez-Primo\\Documents\\Github\\DATA_ANALYTICS\\R_NOTEBOOKS\\MISC_DATA\\april2024.csv")
+
+df[is.na(df)] <- 0
+df2[is.na(df2)] <- 0
+df
+df2
+```
 
 
-#data <- read.csv("C:/Users/Fabian #Alvarez-Primo/Documents/Github/DATA_ANALYTICS/R_NOTEBOOKS/MISC_DATA/april2024.csv")
-data
+```{r}
+str(df)
+```
+
+
+```{r}
+str(df2)
 ```
 
 
 
 
 ```{r}
+subset_df <- df[, c("POST.ID", "PUBLISH", "TIME", "DURATION..SEC.", "IMPRESSIONS", "REACH", "STICKER.TAPS", "PROFILE.VISITS","FOLLOWS")]  # Select columns "A" and "B"
+subset_df2 <- df2[, c("POST.ID", "PUBLISH", "TIME", "DURATION..SEC.", "IMPRESSIONS", "REACH", "STICKER.TAPS", "PROFILE.VISITS","FOLLOWS")]  # Select columns "A" and "B"
 
-published <- as.Date(data$PUBLISH, format="%m/%d/%y" )
-published
+df3 <- rbind(subset_df, subset_df2)
+df3
 ```
 
 
 ```{r}
-plot(data$IMPRESSIONS~published)
+publish <- as.Date(df3$PUBLISH, format="%m/%d/%Y" )
+publish
+```
+
+
+```{r}
+#df4 <- df4[, c("POST.ID", "publish", "TIME", "DURATION..SEC.", "IMPRESSIONS", "REACH", "STICKER.TAPS", "PROFILE.VISITS","FOLLOWS")] 
+#colnames(df4)[colnames(df4) == "publish"] <- "DATE"
+#df4
+df3$REACH
+```
+
+
+```{r}
+#total  = 105 rows
+# 13 values below 100
+
+threshold1 <- 100
+below_threshold <- sum(df3$REACH < threshold1)
+below_threshold
+105-13
+```
+
+
+```{r}
+filtered_df <- df3[df3$REACH >= 100, ]
+filtered_df
+```
+
+
+```{r}
+#par(mfrow = c(2, 2))
+
+#impressions
+
+boxplot(df3$IMPRESSIONS~publish)
+abline(h = 100, col = "blue")
+abline(h = 200, col = "blue")
+
+#visits
+
+boxplot(df3$PROFILE.VISITS~publish)
+abline(h = 2, col = "blue")
+
+#impressions
+
+boxplot(filtered_df$IMPRESSIONS~filtered_df$PUBLISH)
+abline(h = 100, col = "blue")
+abline(h = 200, col = "blue")
+
+boxplot(filtered_df$PROFILE.VISITS~filtered_df$PUBLISH) #publish_filtered)
+abline(h = 2, col = "blue")
+ 
+```
+
+
+```{r}
+# Convert the "PUBLISH" column to Date class
+date1 <- as.Date(filtered_df$PUBLISH,  format="%m/%d/%Y" )
+date1
+```
+
+
+```{r}
+# Determine the day of the week for the "PUBLISH" column
+day_of_week <- weekdays(date1)
+day_of_week
+#plot(filtered_df$IMPRESSIONS~day_of_week)
+#abline(h = 100, col = "blue")
+#abline(h = 200, col = "blue")
+
+```
+
+
+```{r}
+filtered_df$WEEKDAY <-c(day_of_week)  
+filtered_df
+```
+
+
+```{r}
+# Load libraries
+library(ggplot2)
+library(lubridate)  # For date manipulation
+```
+
+
+```{r}
+# Assuming you have already created the `day_of_week` column in `filtered_df`
+# If not, you can create it using weekdays() function
+
+# Convert PUBLISH column to POSIXct format
+#filtered_df$PUBLISH <- as.POSIXct(filtered_df$PUBLISH)
+
+# Create the plot
+p <- ggplot(filtered_df, aes(x = PUBLISH, y = IMPRESSIONS)) +
+  geom_point() +  # Change to geom_point() if you prefer a scatter plot
+  scale_x_datetime(name = "Date") +  # Primary x-axis with dates
+  theme(axis.title.x = element_blank())  # Hide primary x-axis title
+
+# Calculate breaks for the secondary x-axis based on the range of dates
+# We'll use a function to calculate appropriate breaks
+calculate_breaks <- function(min_date, max_date, n = 5) {
+  if (!is.finite(min_date) || !is.finite(max_date)) {
+    stop("Invalid range of dates.")
+  }
+  seq(min_date, max_date, length.out = n)
+}
+
+# Calculate breaks for the secondary x-axis
+breaks <- calculate_breaks(min(filtered_df$PUBLISH), max(filtered_df$PUBLISH), n = 5)
+
+# Add secondary x-axis showing the day of the week
+p + 
+  scale_x_datetime(
+    sec.axis = dup_axis(name = "Day of the Week", breaks = breaks, labels = weekdays(breaks)),
+    labels = filtered_df$PUBLISH
+  )  
+```
+
+
+```{r}
+#interaction.plot(df3$TIME,publish,df3$IMPRESSIONS)
 ```
 
 

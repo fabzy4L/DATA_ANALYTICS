@@ -4,133 +4,164 @@ output: html_notebook
 ---
 
 ```{r}
+# Load libraries
+library(ggplot2)
+library(lubridate)  # For date manipulation
+library(dplyr)
+library(tibble)
+```
+
+
+```{r}
 ##In R, when specifying file paths with backslashes, you need to escape the backslashes or use forward slashes. Here's how you can fix the file path:
 
-address <- c("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/R_NOTEBOOKS/MISC_DATA/april2024.csv")
-address2 <- c("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/R_NOTEBOOKS/MISC_DATA/march2024.csv")
-
-df <- read.csv(address)
-df2 <- read.csv(address2)
-#localmachine
-
+#LOCAL
 #df <- read.csv("C:/Users/Fabian #Alvarez-Primo/Documents/Github/DATA_ANALYTICS/R_NOTEBOOKS/MISC_DATA/april2024.csv")
 #df <- read.csv("C:\\Users\\Fabian Alvarez-Primo\\Documents\\Github\\DATA_ANALYTICS\\R_NOTEBOOKS\\MISC_DATA\\april2024.csv")
 
+#GITHUB
+address <- c("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/R_NOTEBOOKS/MISC_DATA/april2024.csv")
+address2 <- c("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/R_NOTEBOOKS/MISC_DATA/march2024.csv")
+
+#ACCESS DATA
+df <- read.csv(address)
+df2 <- read.csv(address2)
+
+#REPLACE NA W/ ZERO
 df[is.na(df)] <- 0
 df2[is.na(df2)] <- 0
+
 df
 df2
 ```
 
 
 ```{r}
-str(df)
-```
-
-
-```{r}
-str(df2)
+#str(df)
+#str(df2)
 ```
 
 
 
 
 ```{r}
+#RESHAPE AND JOIN DATASETS
+
 subset_df <- df[, c("POST.ID", "PUBLISH", "TIME", "DURATION..SEC.", "IMPRESSIONS", "REACH", "STICKER.TAPS", "PROFILE.VISITS","FOLLOWS")]  # Select columns "A" and "B"
 subset_df2 <- df2[, c("POST.ID", "PUBLISH", "TIME", "DURATION..SEC.", "IMPRESSIONS", "REACH", "STICKER.TAPS", "PROFILE.VISITS","FOLLOWS")]  # Select columns "A" and "B"
+
+# BIND
 
 df3 <- rbind(subset_df, subset_df2)
 df3
 ```
-
-
 ```{r}
-publish <- as.Date(df3$PUBLISH, format="%m/%d/%Y" )
-publish
+#CONVERT TO DATE FORMAT
+
+# The `%y` format specifier in R represents the year as a two-digit number, ignoring the century part and assuming it based on a predefined cutoff. For example, "21" would be interpreted as 2021. Conversely, the `%Y` format specifier represents the year as a four-digit number, including the century part explicitly, providing unambiguous full-year representation such as "2021".
+df3$PUBLISH <- as.Date(df3$PUBLISH, format="%m/%d/%Y" )
 ```
 
-
 ```{r}
-#df4 <- df4[, c("POST.ID", "publish", "TIME", "DURATION..SEC.", "IMPRESSIONS", "REACH", "STICKER.TAPS", "PROFILE.VISITS","FOLLOWS")] 
-#colnames(df4)[colnames(df4) == "publish"] <- "DATE"
-#df4
-df3$REACH
+#STATISTICS SUMMARY
+
+summary_df <- summary(df3)
+summary_df
 ```
-
-
 ```{r}
+#FILTERED DATAFRAME FOLLOWS < 1 IS REMOVED
+filtered_f_df1 <- df3[df3$FOLLOWS >= 1, ]
+filtered_f_df1
+table(df3$FOLLOWS)
+
+```
+```{r}
+#FILTERED DATAFRAME PROFILE.VISITS < 1 IS REMOVED (YIELDED TO NO PROFILE VISITS)
+
+filtered_p_df1 <- df3[df3$PROFILE.VISITS >= 1, ]
+filtered_p_df1
+```
+```{r}
+
+var1 <- tapply(filtered_p_df1$PROFILE.VISITS, filtered_p_df1$PUBLISH,sum)
+var1
+#print(table(var1))
+```
+```{r}
+#CONVERT ARRAY INTO DATAFRAME
+
+library(tibble)
+
+pvdf <- as.data.frame(var1)
+pvdf <- rownames_to_column(pvdf, var = "Factor")
+names(pvdf) <- c("DATE","PROFILE.VISITS")
+pvdf$DATE <- as.Date(pvdf$DATE)
+pvdf
+pvdf_ordered <- pvdf[order(-pvdf$PROFILE.VISITS), ]
+pvdf_ordered
+plot(pvdf)
+#pvdf <- pvdf[order(pvdf$PROFILE.VISITS), ]
+#pv <- as.data.frame(table(filtered_p_df1$PROFILE.VISITS))
+#names(pv) <- c("PV Clicks")
+
+```
+```{r}
+
+#CALCULATE NUMBER OF POSTS W/ A REACH BELOW 100.
+
 #total  = 105 rows
 # 13 values below 100
 
 threshold1 <- 100
 below_threshold <- sum(df3$REACH < threshold1)
 below_threshold
+
 105-13
 ```
-
-
 ```{r}
-filtered_df <- df3[df3$REACH >= 100, ]
-filtered_df
+#FILTERED DATASET
+
+#columns :  "POST.ID"        "PUBLISH"        "TIME"           "DURATION..SEC." "IMPRESSIONS"    "REACH"          "STICKER.TAPS"   "PROFILE.VISITS" "FOLLOWS"   
+filtered_df <- df3[df3$REACH >= 0, ]
+
+# Convert the "PUBLISH" column to Date class
+filtered_df$PUBLISH <- as.Date(filtered_df$PUBLISH,  format="%m/%d/%Y" )
+
+summary_fdf <- summary(filtered_df)
+summary_fdf
 ```
 
-
 ```{r}
-#par(mfrow = c(2, 2))
+par(mfrow = c(1, 2))
 
 #impressions
 
-boxplot(df3$IMPRESSIONS~publish)
+boxplot(df3$IMPRESSIONS~df3$PUBLISH, ylab = "IMPRESSIONS", xlab = "DATE")
 abline(h = 100, col = "blue")
 abline(h = 200, col = "blue")
 
 #visits
 
-boxplot(df3$PROFILE.VISITS~publish)
+boxplot(df3$PROFILE.VISITS~df3$PUBLISH, ylab = "PROFILE.VISITS", xlab = "DATE")
 abline(h = 2, col = "blue")
 
 #impressions
 
-boxplot(filtered_df$IMPRESSIONS~filtered_df$PUBLISH)
+boxplot(filtered_df$IMPRESSIONS~filtered_df$PUBLISH, ylab = "IMPRESSIONS", xlab = "DATE")
 abline(h = 100, col = "blue")
 abline(h = 200, col = "blue")
 
-boxplot(filtered_df$PROFILE.VISITS~filtered_df$PUBLISH) #publish_filtered)
+#visits
+
+boxplot(filtered_df$PROFILE.VISITS~filtered_df$PUBLISH, ylab = "PROFILE.VISITS", xlab = "DATE") #publish_filtered)
 abline(h = 2, col = "blue")
  
 ```
 
 
 ```{r}
-# Convert the "PUBLISH" column to Date class
-date1 <- as.Date(filtered_df$PUBLISH,  format="%m/%d/%Y" )
-date1
-```
-
-
-```{r}
-# Determine the day of the week for the "PUBLISH" column
-day_of_week <- weekdays(date1)
-day_of_week
-#plot(filtered_df$IMPRESSIONS~day_of_week)
-#abline(h = 100, col = "blue")
-#abline(h = 200, col = "blue")
 
 ```
-
-
-```{r}
-filtered_df$WEEKDAY <-c(day_of_week)  
-filtered_df
-```
-
-
-```{r}
-# Load libraries
-library(ggplot2)
-library(lubridate)  # For date manipulation
-```
-
 
 ```{r}
 # Assuming you have already created the `day_of_week` column in `filtered_df`
@@ -165,13 +196,290 @@ p +
   )  
 ```
 
-
 ```{r}
 #interaction.plot(df3$TIME,publish,df3$IMPRESSIONS)
 ```
 
+```{r}
+library(dplyr)
+
+# Assuming 'df' is your dataframe and 'column1' and 'column2' are the specified columns
+
+# Group by 'column2' and calculate the sum of values in 'column1' for each group
+summarized_df <- df %>%
+  group_by(column2) %>%
+  summarise(total_sum = sum(column1))
+
+# Compute the average of the sums
+average_of_sums <- mean(summarized_df$total_sum)
+
+# Print the result
+print(average_of_sums)
+```
 
 ```{r}
+#NUMBER OF POSTS PER DATE FROM FILTERED DATA (LESS THAN 100 IMPRESSIONS REMOVED)
+
+post_freq <- table(filtered_df$PUBLISH)
+post_freq_df <- as.data.frame(post_freq)
+names(post_freq_df) <- c("DATE","POST_FREQ")
+post_freq_df$DATE <- as.Date(post_freq_df$DATE)
+post_freq_df_ordered <- post_freq_df[order(post_freq_df$DATE), ]
+post_freq_df_ordered
+```
+
+
+```{r}
+#MEAN OF IMPRESSIONS FROM FILTERED DATA (LESS THAN 100 IMPRESSIONS REMOVED)
+#MEAN OF REACH FROM FILTERED DATA (LESS THAN 100 IMPRESSIONS REMOVED)
+
+#RATIO OF MEANS
+
+df_mean_impressions <- tapply(filtered_df$IMPRESSIONS, filtered_df$PUBLISH, mean)
+df_mean_reach <- tapply(filtered_df$REACH, filtered_df$PUBLISH, mean)
+
+fdf_mean_impressions <- as.data.frame(df_mean_impressions)
+names(fdf_mean_impressions) <- "MEAN_IMPRESSION"
+
+fdf_mean_reach <- as.data.frame(df_mean_reach)
+names(fdf_mean_reach) <- "MEAN_REACH"
+
+fdf_mean_impressions
+fdf_mean_reach
+```
+
+
+```{r}
+meansratio <- fdf_mean_reach/fdf_mean_impressions
+names(meansratio) <- "MEANSRATIO"
+
+meansratio
+```
+
+
+```{r}
+#columns :  "POST.ID"        "PUBLISH"        "TIME"           "DURATION..SEC." "IMPRESSIONS"    "REACH"          "STICKER.TAPS"   "PROFILE.VISITS" "FOLLOWS"   
+
+#duration sum / # of posts 
+
+df_sum_duration <- tapply(filtered_df$DURATION..SEC., filtered_df$PUBLISH, sum)
+
+fdf_sum_duration <- as.data.frame(df_sum_duration)
+names(fdf_sum_duration) <- "SUM_DURATION"
+
+fdf_sum_duration
+```
+
+
+```{r}
+fdf_mean_duration <- fdf_sum_duration$SUM_DURATION/post_freq_df_ordered$POST_FREQ
+fdf_mean_duration
+```
+
+
+```{r}
+#fdf_mean_reach
+#fdf_mean_duration <- as.data.frame(fdf_mean_duration)
+fdf_sum_duration$MEAN_DURATION <- c(fdf_mean_duration)
+fdf_sum_duration
+
+```
+
+
+```{r}
+#"STICKER.TAPS"   "PROFILE.VISITS" "FOLLOWS" 
+
+# outcomes = sum of ((sum of taps) + (sum of visits) + (sum of follows))
+
+#outcomes/#of posts
+df_sum_taps<- tapply(filtered_df$STICKER.TAPS, filtered_df$PUBLISH, sum)
+df_sum_visits <- tapply(filtered_df$PROFILE.VISITS, filtered_df$PUBLISH, sum)
+df_sum_follows <- tapply(filtered_df$FOLLOWS, filtered_df$PUBLISH, sum)
+
+fdf_sum_taps <- as.data.frame(df_sum_taps)
+names(fdf_sum_taps) <- "SUM_TAPS"
+fdf_sum_visits <- as.data.frame(df_sum_visits)
+names(fdf_sum_visits) <- "SUM_VISITS"
+fdf_sum_follows <- as.data.frame(df_sum_follows)
+names(fdf_sum_follows) <- "SUM_FOLLOWS"
+
+fdf_sum_taps
+fdf_sum_visits
+fdf_sum_follows
+```
+
+
+```{r}
+OUTCOMES <- cbind(fdf_sum_taps$SUM_TAPS,fdf_sum_visits$SUM_VISITS,fdf_sum_follows$SUM_FOLLOWS)
+OUTCOMES
+```
+
+
+```{r}
+OUTCOMES <- rowSums(OUTCOMES)
+OUTCOMES <- as.data.frame(OUTCOMES)
+#colSums(outcomes)
+OUTCOMES
+#sum_row <- colSums(outcomes)
+#sum_row
+
+```
+
+
+```{r}
+#NEW DATASET FROM COLLECTED DATA
+
+
+newdf <- cbind(post_freq_df_ordered,fdf_mean_impressions$MEAN_IMPRESSION,fdf_mean_reach$MEAN_REACH,meansratio$MEANSRATIO,fdf_sum_duration$SUM_DURATION,fdf_sum_duration$MEAN_DURATION, OUTCOMES$OUTCOMES)
+names(newdf) <- c("DATE","POST_FREQ","MEAN_IMPRESSION","MEAN_REACH","MEANSRATIO", "SUM_DURATION", "MEAN_DURATION", "OUTCOMES")
+weedk_day <- weekdays(newdf$DATE)
+newdf$WEEKDAY <- c(weedk_day)
+newdf
+```
+
+
+```{r}
+(sum(newdf$POST_FREQ))/31
+
+
+table(newdf$WEEKDAY)
+```
+
+
+```{r}
+
+
+#outcomes = visits + taps + follows
+
+SUCCESS <- newdf$OUTCOMES/newdf$POST_FREQ
+newdf$SUCCESS <- c(SUCCESS)
+
+
+
+#outcomes / # of posts = success per post
+#  relative success = success/max val 
+#min_value <- min(newdf$SUCCESS)
+
+max_value <- max(newdf$SUCCESS)
+newdf$NORM_SUCC <- (newdf$SUCCESS) / (max_value)
+
+newdf
+
+
+newdf_succ <- newdf[newdf$NORM_SUCC >= 0.5, ]
+newdf_succ
+#tapply(newdf$WEEKDAY, index, function)
+```
+
+
+```{r}
+#par(mfrow = c(1, 2))
+newdf_ordered <- newdf[order(newdf$WEEKDAY, newdf$DATE), ]
+newdf_ordered
+plot(newdf$DATE,newdf$NORM_SUCC, ylim=c(0,1),  ylab="RELATIVE SUCCESS", xlab = "DATE")
+
+lines(newdf$DATE,newdf$MEANSRATIO, col = "red")
+
+duration_score <- newdf$MEAN_DURATION/(max(newdf$MEAN_DURATION))
+#plot(newdf$DATE,newdf$MEAN_DURATION, col = "purple")
+plot(newdf$DATE,duration_score, col = "red")
+points(newdf$DATE,newdf$NORM_SUCC, col = "black")
+#legend()
+
+#MIGHT NEED TO NORMALIZE THE DATA : HOW CAN OUTCOMES SCALE TO IMPRESSIONS? 
+#MEANS RATIO
+```
+
+
+```{r}
+ggplot(newdf, aes(x = DATE)) +
+  geom_line(aes(y = POST_FREQ, color = "Post Frequency")) +
+  geom_line(aes(y = MEAN_IMPRESSION, color = "Impression Mean")) +
+  labs(title = "Post Frequency and Impression Mean Over Time",
+       x = "Date",
+       y = "Count") +
+  scale_color_manual(name = "Variables",
+                     values = c("Post Frequency" = "blue", "Impression Mean" = "red")) +
+  theme_minimal()
+```
+
+
+```{r}
+ggplot(newdf, aes(x = DATE)) +
+  geom_line(aes(y = MEAN_IMPRESSION, color = "Impression Mean")) +
+  geom_line(aes(y = POST_FREQ * 10, color = "Post Frequency")) +
+###
+  scale_y_continuous(name = "Impression Mean",
+                     sec.axis = sec_axis(~./10, name = "Post Frequency")) +
+###
+  labs(title = "Post Frequency and Impression Mean Over Time",
+       x = "Date",
+       y = "Impression Mean") +
+  scale_color_manual(name = "Variables",
+                     values = c("Impression Mean" = "blue", "Post Frequency" = "red")) +
+  theme_minimal()
+```
+
+
+```{r}
+# Normalize the post frequency values to have a similar scale as impression_mean
+max_impression_mean <- max(newdf$MEAN_IMPRESSION)
+post_frequency_normalized <- newdf$POST_FREQ * (max_impression_mean / max(newdf$POST_FREQ))
+newdf$POST_FREQ_NORM <- c(post_frequency_normalized)
+
+###
+
+# Set the limits for the y-axis for post frequency
+#post_frequency_min <- 0
+#post_frequency_max <- 0  # Set this value according to your data
+
+###
+
+ggplot(newdf, aes(x = DATE)) +
+  geom_line(aes(y = MEAN_IMPRESSION, color = "Impression Mean")) +
+  geom_line(aes(y = POST_FREQ_NORM, color = "Post Frequency")) +
+  
+####
+#  scale_y_continuous(name = "Count", 
+#                     limits = c(post_frequency_min, post_frequency_max), 
+#                     breaks = seq(post_frequency_min, post_frequency_max, by = 1)) +
+####
+  
+  labs(title = "NORMALIZED Post Frequency and Impression Mean Over Time",
+       x = "Date",
+       y = "Count") +
+  scale_color_manual(name = "Variables",
+                     values = c("Impression Mean" = "blue", "Post Frequency" = "red")) +
+  theme_minimal()
+```
+
+
+
+```{r}
+#[1] "POST.ID"        "PUBLISH"        "TIME"           "DURATION..SEC." "IMPRESSIONS"    "REACH"          "STICKER.TAPS"   "PROFILE.VISITS" "FOLLOWS"       
+#colnames(filtered_df)
+#hist(filtered_df$PUBLISH)
+par(mfrow = c(2, 2))
+
+ggplot(filtered_df, aes(x = PUBLISH)) +
+  geom_histogram(binwidth = 1, fill = "PURPLE", color = "black") +
+  labs(title = "Histogram of Dates", x = "Date", y = "Post Frequency")
+
+ggplot(filtered_df, aes(x = PUBLISH, y = IMPRESSIONS)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  labs(title = "Histogram of Dates", x = "Date", y = "Impressions")
+
+
+ggplot(filtered_df, aes(x = PUBLISH, y = IMPRESSIONS)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  labs(title = "Histogram of Dates", x = "Date", y = "Frequency")
+
+```
+
+
+```{r}
+correlation_matrix <- cor(filtered_df, use="pairwise.complete.obs")
+correlation_matrix
 ```
 
 

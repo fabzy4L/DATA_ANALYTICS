@@ -1,0 +1,140 @@
+---
+title: "WELLS FARGO 06/2024"
+output: html_notebook
+---
+```{r}
+df <- read.csv('C:\\Users\\Fabian Alvarez-Primo\\Downloads\\WF - income (1).csv')
+```
+
+
+```{r}
+library(dplyr)
+
+# Using dplyr to remove 'Status' and 'Income' columns
+df <- df %>% select(-Status, -Income)
+
+
+filtered_df <- df[df$Account == "DISH Network Payroll",]
+df <- filtered_df
+df
+```
+
+
+```{r}
+str(df)
+```
+
+
+```{r}
+library(lubridate)
+df$Date <- ymd(df$Date)
+df$Date <- format(df$Date, "%Y-%m") # or any format you prefer
+df$Date <- as.factor(df$Date)
+```
+
+
+```{r}
+df$Amount <- gsub("[\\$,]","", df$Amount)
+df$Amount <- as.numeric(df$Amount)
+df$Amount
+```
+```{r}
+
+comission <- df$Amount - 1380
+comission
+rev_comission <- rev(comission)
+filtered_df <- df[df$Account == "DISH Network Payroll",]
+
+
+#df['C'] = df['A'] + df['B']
+```
+
+
+```{r}
+df$Date <- as.Date(df$Date, format = "%b %d, %Y")
+```
+
+
+```{r}
+rev_date <- rev(df$Date)
+rev_Amount <- rev(df$Amount)
+
+
+rev_comission
+rev_date
+rev_Amount
+```
+
+
+```{r}
+rev_df <- data.frame(rev_date, rev_Amount,rev_comission)
+```
+
+
+```{r}
+
+names(rev_df)[names(rev_df) == "rev_date"] <- "Date"
+names(rev_df)[names(rev_df) == "rev_Amount"] <- "Amount"
+names(rev_df)[names(rev_df) == "rev_comission"] <- "Commission"
+rev_df <- rev_df[rev_df$Commission >= 0, ]
+rev_df
+
+```
+
+
+```{r}
+rev_date <- rev(df$Date)
+rev_Amount <- rev(df$Amount)
+
+#plot(df$Amount~df$Date, xlab = "Date", ylab = "Amount", main = "Income by Date")
+barplot(rev_Amount, names.arg = rev_date, xlab = "Date", ylab = "Income", main = "Income by Date")
+abline(h = 1380, col = "red")
+text(1.15,1500,"Basepay", cex = 0.75)
+
+```
+
+
+```{r}
+library(ggplot2)
+
+ggplot(df, aes(x = Date, y = Amount)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Date", y = "Income", title = "Income by Date") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  geom_hline(yintercept = 1380, color = "red") +
+  geom_text(aes(x = as.Date("2023-01-01"), y = 1380, label = "Basepay"), color = "black", size = 3.5, vjust = -1.5)
+```
+
+
+```{r}
+barplot(rev_df$Commission, names.arg = rev_df$Date, xlab = "Date", ylab = "Income", main = "Income by Date")
+#abline(h = 1380, col = "red")
+#text(1.15,1500,"Basepay", cex = 0.75)
+
+```
+
+
+```{r}
+rev_df$Commission
+```
+
+
+```{r}
+commission_stats
+```
+
+
+```{r}
+commission_stats <- summary(rev_df$Commission)
+boxplot(commission_stats)
+
+abline(h=501.40, col='red')
+abline(h=441.79, col='red')
+
+
+```
+
+
+```{r}
+```

@@ -1,0 +1,39 @@
+EMPLOYEE TYPE,EMPLOYEE ID,NAME,MANAGER,LC,,SHIFT,LOGIN,,,,,"PAID HOURS-TOTAL(FUNCTION,EMPLOYEE)",JOBS,JPH,UNITS,UPH
+AMZN,0,Anonymous,Anonymous,-,,-,-,-,,,,,6,,6,
+AMZN,103278272,"Onyango,Selby Atieno","Hadley,Datarius",-,,N/A,sonyango,-,,,,,172,,172,
+AMZN,104544932,"Townes,Tori","Myers,Eddie",Level 5,,DA7-0730,toritown,-,,,,0.32,,,,
+AMZN,109537470,"Hadley,Datarius","Ponce,Alex David",-,,N/A,datariuh,-,,,,,85,,85,
+AMZN,111527568,"Bratcher,Jazzmin","Myers,Eddie",Level 5,,DA5-0730,yjazzmin,-,,,,0.09,21,230.49,21,230.49
+AMZN,112761143,"Hall,Quindarius","Arboleda,Luis",Level 5,,DB1-0730,quindaha,-,,,,2.96,443,149.68,443,149.68
+AMZN,112873384,"Clements,Makayla","Arboleda,Luis",Level 5,,DC7-0730,clemakan,-,,,,0.14,47,336.38,47,336.38
+AMZN,201931503,"Pinto,Antonio","Arboleda,Luis",Level 5,,DB2-0730,santonpi,-,,,,0.28,63,228.63,63,228.63
+AMZN,201944454,"Cheremo,Cesar","Horton,Dakota",Level 5,,NA5-1830,cheremoc,-,,,,0.04,10,233.77,10,233.77
+AMZN,201946851,"Haqq,Nayquan","Primo,Fabian",Level 5,,DA6-0730,haqqnayq,-,,,,0.53,68,129.11,68,129.11
+AMZN,201959939,"Keith,Gage","Horton,Dakota",Level 5,,DA5-0730,gakeiths,-,,,,1.01,89,87.68,89,87.68
+AMZN,202372235,"Noble,TaneJa","Horton,Dakota",Level 5,,DA5-0730,nobletan,-,,,,3.13,351,112.29,351,112.29
+TEMP,202463599,"turner,Shan","Horton,Dakota",Level 1,,FLEXPT,zturnsha,-,,,,6.04,746,123.45,746,123.45
+AMZN,202680526,"DB,Zoe","Myers,Eddie",Level 5,,DA7-0730,armstrzu,-,,,,0.26,12,46.01,12,46.01
+TEMP,202737486,"Washington,Tiauna","Primo,Fabian",Level 2,,DA6-0730,tiauwasy,-,,,,6.07,1052,173.38,1052,173.38
+AMZN,202927666,"Israel,Yamane","Primo,Fabian",Level 5,,DA5-0730,isryaman,-,,,,4,578,144.47,578,144.47
+AMZN,203240721,"Jenkins,DJ","Primo,Fabian",Level 5,,DA6-0730,fdjenkin,-,,,,0.9,224,249.27,224,249.27
+AMZN,203267849,"Barrera,Treissi","Horton,Dakota",Level 5,,DA6-0730,tbarrerm,-,,,,0.13,9,69.23,9,69.23
+TEMP,203380848,"Haygood Jr,David","Horton,Dakota",Level 1,,FLEXPT,haygodav,-,,,,1.05,230,219.75,230,219.75
+AMZN,203385747,"Bing,Kamren","Davis,Sam",Level 5,,DB3-0730,kambingg,-,,,,1.42,100,70.64,100,70.64
+TEMP,203419705,"Humphries,Jden","Fortune,Stanley",Level 1,,DB2-0730,jdenhum,-,,,,0.04,5,113.21,5,113.21
+AMZN,203646040,"jean,ilece","Arboleda,Luis",Level 5,,DB3-0730,jeahilec,-,,,,0.06,3,53.73,3,53.73
+AMZN,203916364,"Herrera,Aydan","Arboleda,Luis",Level 5,,DC7-0730,heraydan,-,,,,4.91,962,195.78,962,195.78
+AMZN,204032089,"Nelson,Nene","Arboleda,Luis",Level 5,,DB2-0730,neldashi,-,,,,1.75,441,251.56,441,251.56
+TEMP,204046845,"Glover,Najhae","Davis,Sam",Level 3,,DB2-0730,lanajhgl,-,,,,5.96,784,131.57,784,131.57
+AMZN,204162968,"newman,morgan","Arboleda,Luis",Level 5,,DB3-0730,mnewmanh,-,,,,0.61,95,155.1,95,155.1
+AMZN,204401923,"Floyd,Sonnae","Davis,Sam",Level 5,,FLEXRT,sodfloyd,-,,,,6.57,345,52.49,345,52.49
+TEMP,204518033,"Arkwright,Allen Collins","Primo,Fabian",Level 2,,DA6-0730,wandeall,-,,,,0.8,152,189.08,152,189.08
+AMZN,204565668,"Fennell,Baleigh","Primo,Fabian",Level 5,,DA6-0730,baleifen,-,,,,6.86,1205,175.62,1205,175.62
+AMZN,204565770,"Kelly,Arlinda","Primo,Fabian",Level 5,,DA7-0730,kellyarl,-,,,,3.15,766,243.54,766,243.54
+TEMP,204590739,"stevens,gabriel alex","Davis,Sam",Level 3,,DB1-0730,mgasteve,-,,,,1.61,105,65.15,105,65.15
+AMZN,204824232,"Haj Rashed,Asmahan","Centeno,ZELINA",Level 1,,PT101,aasmahaj,-,,,,5.8,913,157.52,913,157.52
+TEMP,205168697,"Ridgell,Erica","Arboleda,Luis",Level 5,,PT101,ridgeric,-,,,,2.88,499,173.46,499,173.46
+TEMP,205468139,"jones,Josh","Davis,Sam",Level 3,,DB2-0730,joneyjos,-,,,,0.43,15,34.66,15,34.66
+TEMP,205567743,"Bentley,Marie","Primo,Fabian",Level 2,,DA6-0730,mmariben,-,,,,8.1,614,75.77,614,75.77
+TEMP,205724971,"PATEL,Sakshi","Davis,Sam",Level 4,,DB1-0730,patedsax,-,,,,8.46,1581,186.97,1581,186.97
+TEMP,205747733,"Murray,Joshua","Primo,Fabian",Level 3,,DA6-0730,jomurraj,-,,,,7.39,1620,219.28,1620,219.28
+TEMP,205747792,"Lnu,Devi ram","Primo,Fabian",Level 3,,DA6-0730,vdeviral,-,,,,6.36,1236,194.39,1236,194.39

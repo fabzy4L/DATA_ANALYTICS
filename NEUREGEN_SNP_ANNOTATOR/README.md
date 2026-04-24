@@ -124,7 +124,7 @@ R_SHINY_PROJECTS/
 
 ## Author
 
-**Fabian Alvarez-Primo**
+**Fabian A. Alvarez-Primo, Ph.D.**
 [github.com/fabzy4L](https://github.com/fabzy4L)
 
 ---

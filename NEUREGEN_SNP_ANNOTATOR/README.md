@@ -114,10 +114,8 @@ A researcher has completed a genome-wide association study (GWAS) and wants to r
 
 ```
 R_SHINY_PROJECTS/
+├── legacy          
 ├── INT_GENEVIEW_NGX.R     # Main Shiny application
-├── GENE_VIEWER.R          # CSV genomics data explorer
-├── Shiny_NeuReGen_Gx.R    # NeuReGx genomic testing form
-├── ML-based web app.R     # Random Forest golf predictor (demo)
 ├── RSID200.csv            # Example RSID input file
 └── README.md              # This file
 ```

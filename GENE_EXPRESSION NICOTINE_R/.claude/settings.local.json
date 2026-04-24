@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/PYTHON/qPCR Normality Python.py' '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/notebooks/python/qPCR_normality.py')",
+      "Bash(mv '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/PYTHON/GeneStatistics.csv' '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/data/processed/')",
+      "Bash(mv '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/PYTHON/GeneStatistics2.csv' '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/data/processed/')",
+      "Bash(mv '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/R  Project/HTML/*.html' '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/outputs/html/')",
+      "Bash(mv '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/Power BI/Gene Expression Average Fold Changes.pbix' '/c/Users/Fabian Alvarez-Primo/Documents/Github/DATA_ANALYTICS/GENE_EXPRESSION NICOTINE_R/outputs/powerbi/')"
+    ]
+  }
+}

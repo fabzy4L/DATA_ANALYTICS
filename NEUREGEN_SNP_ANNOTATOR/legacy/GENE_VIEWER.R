@@ -1,5 +1,5 @@
 
-
+#install.packages("DT")
 # Load R packages
 library(shiny)
 library(shinythemes)

@@ -13,7 +13,7 @@ pip install -r requirements.txt
 ```
 
 # Make sure pip/wheel/setuptools are up-to-date
-python -m pip install --upgrade pip setuptools wheel
+python -m pip install --upgrade pip setuptools wheel-
 
 # Install a prebuilt pyarrow wheel first (this avoids compiling)
 python -m pip install "pyarrow==14.0.2" --only-binary=:all:

@@ -5,8 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 
-# ---- Helpers / models ----
-from rtb.metrics import clean, aggregate, Thresholds, ewma, percentile_band
+# ---- Legacy helpers (used only when a dated CSV is uploaded) ----
+from rtb.metrics import aggregate, Thresholds, ewma, percentile_band
 from rtb.models import per_login_learning_curve, predict_uph
 from rtb.comments import build_comments, CommentConfig
 
@@ -20,7 +20,6 @@ st.caption("Upload CSVs, filter cohorts, visualize UPH & learning curves, auto-g
 # =========================
 with st.sidebar:
     st.header("Controls")
-    # Use whatever defaults you prefer; these match your prior file
     uph_low = st.number_input("UPH target (low threshold)", min_value=0.0, value=12.0, step=1.0)
     uph_high = st.number_input("UPH high-performer threshold", min_value=0.0, value=19.0, step=1.0)
     uph_cap = st.number_input("UPH cap for plotting (clip)", min_value=0.0, value=19.0, step=1.0)
@@ -33,12 +32,14 @@ if uploaded is None:
     st.info("Upload a CSV to begin.")
     st.stop()
 
+# CSV load (after file_uploader)
 raw = pd.read_csv(uploaded)
 
-# Clean and normalize with robust cleaner
+# Clean using your flexible metrics.clean()
+from rtb.metrics import clean
 df = clean(raw)
 
-# Detect legacy (dated) schema from normalized df
+# Detect if it's a legacy (dated) file for those old charts/tables
 has_date_schema = {"date","login","level","hours","units"}.issubset(df.columns)
 
 # Compat: some legacy code expects lowercase 'uph'
@@ -50,71 +51,113 @@ st.write("Uploaded DataFrame preview:")
 st.dataframe(raw.head())
 
 # =========================
+# Flexible Clean (works for both schemas)
+# =========================
+def flexible_clean(df: pd.DataFrame) -> tuple[pd.DataFrame, bool]:
+    """
+    Return (clean_df, has_date_schema).
+    - Legacy schema: expects ['date','login','level','hours','units'] -> adds 'uph' & 'shift_id'
+    - RTB schema (your current file): expects at least
+        ['Process Name','Function Name','Employee Id','Paid Hours-Total(function,employee)']
+      Derives UPH if 'Units' exists; creates shift_id per (Employee Id, Function Name).
+    """
+    # Path A: legacy dated schema
+    legacy = {"date","login","level","hours","units"}
+    if legacy.issubset(df.columns):
+        out = df.copy()
+        out["date"] = pd.to_datetime(out["date"])
+        out["hours"] = pd.to_numeric(out["hours"], errors="coerce").fillna(0.0)
+        out["units"] = pd.to_numeric(out["units"], errors="coerce").fillna(0.0)
+        out = out[out["hours"] >= 0.25]
+        out["uph"] = out["units"] / out["hours"]
+        if "shift_id" not in out.columns:
+            out = out.sort_values(["login","date"])
+            out["shift_id"] = out.groupby("login").cumcount() + 1
+        return out, True
+
+    # Path B: RTB schema (like your screenshot)
+    needed_min = {"Process Name","Function Name","Employee Id","Paid Hours-Total(function,employee)"}
+    if needed_min.issubset(df.columns):
+        out = df.copy()
+        # Normalize numerics we rely on
+        for col in ["Paid Hours-Total(function,employee)",
+                    "Paid Hours-Small(function,employee)",
+                    "Paid Hours-Medium(function,employee)",
+                    "Paid Hours-Large(function,employee)",
+                    "Paid Hours-HeavyBulky(function,employee)",
+                    "Units","UPH","JPH"]:
+            if col in out.columns:
+                out[col] = pd.to_numeric(out[col], errors="coerce")
+
+        # Derive UPH if Units present
+        if "UPH" not in out.columns and "Units" in out.columns:
+            ph = out["Paid Hours-Total(function,employee)"].replace(0, np.nan)
+            out["UPH"] = out["Units"] / ph
+
+        # Back-compat for legacy code that expects lowercase 'uph'
+        if "UPH" in out.columns and "uph" not in out.columns:
+            out["uph"] = out["UPH"]
+
+        if "shift_id" not in out.columns:
+            out["shift_id"] = out.groupby(["Employee Id","Function Name"]).cumcount() + 1
+        return out, False
+
+    raise ValueError(
+        "Unrecognized schema. Provide either legacy columns "
+        "['date','login','level','hours','units'] or RTB columns with at least "
+        "['Process Name','Function Name','Employee Id','Paid Hours-Total(function,employee)'] "
+        "and optionally 'Units' to derive UPH."
+    )
+
+try:
+    df, has_date_schema = flexible_clean(raw)
+except Exception as e:
+    st.error(str(e))
+    st.stop()
+
+# =========================
 # Shared helpers for grouped RTB panels
 # =========================
 def slope_xy(x, y):
     x = np.asarray(x, float); y = np.asarray(y, float)
     m = np.isfinite(x) & np.isfinite(y)
-    if m.sum() < 2:
+    if m.sum() < 2: 
         return np.nan
     A = np.vstack([np.ones(m.sum()), x[m]]).T
-    intercept, slope = np.linalg.lstsq(A, y[m], rcond=None)[0]
-    return float(slope)
+    coef, *_ = np.linalg.lstsq(A, y[m], rcond=None)
+    return float(coef[1])
 
 def render_grouped_panel(df_proc: pd.DataFrame, uph_low_default: float, uph_cap_clip: float,
                          process_label: str):
     """
-    Grouped RTB analysis used for Directed Loader / Palletizer (and others).
-    Works with both raw Amazon headers and normalized headers from rtb.metrics.clean().
+    Generic grouped RTB analysis used for Directed Loader / Palletizer (and others).
+    Groups by Function Name by default, but allows Size/Job Action/Unit Type/Manager/Employee Type.
     """
     st.subheader(f"{process_label} — Standards, Trends, Comments")
 
-    # ---------- Resolve column names (raw vs normalized) ----------
-    def pick(*names):
-        for n in names:
-            if n in df_proc.columns:
-                return n
-        return None
-
-    # Grouping candidates
-    fn_col   = pick("Function Name", "function_name")
-    size_col = pick("Size", "size")
-    ja_col   = pick("Job Action", "job_action")
-    ut_col   = pick("Unit Type", "unit_type")
-    mgr_col  = pick("Manager", "manager")
-    et_col   = pick("Employee Type", "employee_type")
-
-    # Measures / identifiers
-    ph_col   = pick("Paid Hours-Total(function,employee)", "paid_hours_total", "hours")
-    units_col= pick("Units", "units")
-    uph_col  = pick("UPH", "uph")
-    jph_col  = pick("JPH", "jph")
-    emp_col  = pick("Employee Id", "employee_id", "login")
-    name_col = pick("Name", "name")
-
-    # Ensure we have a grouping axis
-    group_options = [c for c in [fn_col, size_col, ja_col, ut_col, mgr_col, et_col] if c]
-    if not group_options:
-        st.info("No suitable grouping columns found (e.g., Function Name).")
-        return
-    group_col = st.selectbox(f"Group by ({process_label})", group_options, index=0, key=f"group_{process_label}")
-    groups = sorted(df_proc[group_col].dropna().unique().tolist())
-
-    # Coerce numerics
-    for col in [ph_col, units_col, uph_col, jph_col]:
-        if col:
+    # Ensure core numerics
+    for col in ["Paid Hours-Total(function,employee)","Units","UPH","JPH"]:
+        if col in df_proc.columns:
             df_proc[col] = pd.to_numeric(df_proc[col], errors="coerce")
 
     # Derive UPH if missing
-    if uph_col is None and units_col and ph_col:
-        df_proc["__UPH__"] = df_proc[units_col] / df_proc[ph_col].replace(0, np.nan)
-        uph_col = "__UPH__"
+    if "UPH" not in df_proc.columns and "Units" in df_proc.columns:
+        ph = df_proc["Paid Hours-Total(function,employee)"].replace(0, np.nan)
+        df_proc["UPH"] = df_proc["Units"] / ph
 
-    # ---------- Editable targets ----------
+    # Grouping axis (per-LC style)
+    group_options = [c for c in ["Function Name","Size","Job Action","Unit Type","Manager","Employee Type"]
+                     if c in df_proc.columns]
+    if not group_options:
+        group_options = ["Function Name"]
+    group_col = st.selectbox(f"Group by ({process_label})", group_options, index=0, key=f"group_{process_label}")
+    groups = sorted(df_proc[group_col].dropna().unique().tolist())
+
+    # Standards editor (seed from sidebar)
     default_uph = float(uph_low_default)
     default_jph = 20.0
 
-    st.markdown("**Per-Group Standards (editable)**")
+    st.markdown("**Per‑Group Standards (editable)**")
     state_key = f"standards_{process_label}_{group_col}"
     if state_key not in st.session_state:
         st.session_state[state_key] = pd.DataFrame({
@@ -140,25 +183,22 @@ def render_grouped_panel(df_proc: pd.DataFrame, uph_low_default: float, uph_cap_
     # Apply targets
     rtb = df_proc.merge(std_edit, on=group_col, how="left")
 
-    has_uph = (uph_col in rtb.columns) and rtb[uph_col].notna().any()
-    if has_uph and ph_col:
-        rtb["UPH_vs_target"] = rtb[uph_col] - rtb["UPH_target"]
-
-        # % below target per group
+    has_uph = "UPH" in rtb.columns and rtb["UPH"].notna().any()
+    if has_uph:
+        rtb["UPH_vs_target"] = rtb["UPH"] - rtb["UPH_target"]
         pct_below = (rtb.assign(below=rtb["UPH_vs_target"] < 0)
                         .groupby(group_col)["below"].mean()
                         .mul(100).reset_index(name="pct_below_target"))
 
-        # Slope of UPH vs paid hours (simple OLS)
         slope_df = (rtb.groupby(group_col, as_index=False)
-                      .apply(lambda g: slope_xy(g[ph_col], g[uph_col]))
+                      .apply(lambda g: slope_xy(g["Paid Hours-Total(function,employee)"], g["UPH"]))
                       .rename(columns={None:"slope_uph_per_hr"}))
 
         fn_sum = (rtb.groupby(group_col, as_index=False)
                     .agg(
-                        employees=(emp_col, "nunique") if emp_col else ("UPH_target","size"),
-                        paid_hours_total=(ph_col, "sum") if ph_col else ("UPH_target","size"),
-                        avg_UPH=(uph_col, "mean"),
+                        employees=("Employee Id","nunique"),
+                        paid_hours_total=("Paid Hours-Total(function,employee)","sum"),
+                        avg_UPH=("UPH","mean"),
                     )
                     .merge(std_edit, on=group_col, how="left")
                     .merge(slope_df, on=group_col, how="left")
@@ -185,12 +225,11 @@ def render_grouped_panel(df_proc: pd.DataFrame, uph_low_default: float, uph_cap_
         st.markdown(f"**Summary by {group_col}**")
         cols = [group_col,"employees","paid_hours_total","avg_UPH","UPH_target","UPH_gap",
                 "slope_uph_per_hr","pct_below_target","comment"]
-        show_cols = [c for c in cols if c in fn_sum.columns]
-        st.dataframe(fn_sum[show_cols].sort_values(["UPH_gap","slope_uph_per_hr"], ascending=[True,False]),
+        st.dataframe(fn_sum[cols].sort_values(["UPH_gap","slope_uph_per_hr"], ascending=[True,False]),
                      use_container_width=True)
 
         # Download summary
-        buf = io.StringIO(); fn_sum[show_cols].to_csv(buf, index=False)
+        buf = io.StringIO(); fn_sum[cols].to_csv(buf, index=False)
         st.download_button(f"Download Summary by {group_col} (CSV)", buf.getvalue(),
                            file_name=f"{process_label}_{group_col}_summary.csv", mime="text/csv",
                            key=f"dl_sum_{process_label}_{group_col}")
@@ -200,35 +239,33 @@ def render_grouped_panel(df_proc: pd.DataFrame, uph_low_default: float, uph_cap_
         sel_grp = st.selectbox(f"{group_col}", groups, key=f"trend_sel_{process_label}_{group_col}")
         g = rtb[rtb[group_col] == sel_grp].copy()
 
-        if ph_col:
-            x = g[ph_col].astype(float).values
-            y = g[uph_col].astype(float).clip(0, float(uph_cap_clip)).values
-            m = np.isfinite(x) & np.isfinite(y)
-            if m.sum() >= 2:
-                A = np.vstack([np.ones(m.sum()), x[m]]).T
-                intercept, slope = np.linalg.lstsq(A, y[m], rcond=None)[0]
-                fig, ax = plt.subplots()
-                ax.scatter(x[m], y[m])
-                x_line = np.linspace(x[m].min(), x[m].max(), 50)
-                y_line = intercept + slope * x_line
-                ax.plot(x_line, y_line)
-                ax.set_xlabel(ph_col)
-                ax.set_ylabel(uph_col)
-                ax.set_title(f"{sel_grp} — {uph_col} vs {ph_col} (slope={slope:.2f} UPH/hr)")
-                st.pyplot(fig)
-            else:
-                st.info("Not enough points to plot trend.")
+        x = g["Paid Hours-Total(function,employee)"].astype(float).values
+        y = g["UPH"].astype(float).clip(0, float(uph_cap_clip)).values
+        m = np.isfinite(x) & np.isfinite(y)
+        if m.sum() >= 2:
+            A = np.vstack([np.ones(m.sum()), x[m]]).T
+            intercept, slope = np.linalg.lstsq(A, y[m], rcond=None)[0]
+            fig, ax = plt.subplots()
+            ax.scatter(x[m], y[m])
+            x_line = np.linspace(x[m].min(), x[m].max(), 50)
+            y_line = intercept + slope * x_line
+            ax.plot(x_line, y_line)
+            ax.set_xlabel("Paid Hours Total (function, employee)")
+            ax.set_ylabel("UPH")
+            ax.set_title(f"{sel_grp} — UPH vs Paid Hours (slope={slope:.2f} UPH/hr)")
+            st.pyplot(fig)
+        else:
+            st.info("Not enough points to plot trend.")
 
         # Associates table vs this group's target
         tgt = std_edit.loc[std_edit[group_col] == sel_grp]
         uph_tgt = float(tgt["UPH_target"].iloc[0]) if not tgt.empty else np.nan
 
-        assoc_group_keys = [c for c in [emp_col, name_col] if c]
-        assoc = (g.groupby(assoc_group_keys, as_index=False)
+        assoc = (g.groupby(["Employee Id","Name"], as_index=False)
                    .agg(
-                       paid_hours_total=(ph_col,"sum") if ph_col else (uph_col,"size"),
-                       avg_UPH=(uph_col,"mean"),
-                       units=(units_col,"sum") if units_col else (uph_col,"size"),
+                       paid_hours_total=("Paid Hours-Total(function,employee)","sum"),
+                       avg_UPH=("UPH","mean"),
+                       units=("Units","sum") if "Units" in g.columns else ("Paid Hours-Total(function,employee)","size"),
                    ))
         assoc["UPH_target"] = uph_tgt
         assoc["UPH_gap"] = (assoc["avg_UPH"] - assoc["UPH_target"]).round(2)
@@ -240,14 +277,14 @@ def render_grouped_panel(df_proc: pd.DataFrame, uph_low_default: float, uph_cap_
         st.download_button(f"Download Associates for {sel_grp} (CSV)", abuf.getvalue(),
                            file_name=f"{process_label}_{sel_grp}_associates.csv", mime="text/csv",
                            key=f"dl_assoc_{process_label}_{sel_grp}")
+
     else:
         # Hours-only fallback if Units/UPH absent
         st.warning("No 'Units' or 'UPH' found. Showing hours exposure only. Add a Units column to unlock UPH analysis.")
-        if ph_col:
-            expo = (rtb.groupby(group_col, as_index=False)
-                      .agg(employees=(emp_col,"nunique") if emp_col else (group_col,"size"),
-                           paid_hours_total=(ph_col,"sum")))
-            st.dataframe(expo.sort_values("paid_hours_total", ascending=False), use_container_width=True)
+        expo = (rtb.groupby(group_col, as_index=False)
+                  .agg(employees=("Employee Id","nunique"),
+                       paid_hours_total=("Paid Hours-Total(function,employee)","sum")))
+        st.dataframe(expo.sort_values("paid_hours_total", ascending=False), use_container_width=True)
 
 # =========================
 # Tabs for Processes & Legacy
@@ -256,24 +293,22 @@ tabs = st.tabs(["Directed Loader", "Palletizer", "Legacy (dated) analysis"])
 
 # ---- Directed Loader tab ----
 with tabs[0]:
-    if "Process Name" in df.columns or "process_name" in df.columns:
-        proc_col = "Process Name" if "Process Name" in df.columns else "process_name"
-        procs = sorted(df[proc_col].dropna().unique().tolist())
+    if "Process Name" in df.columns:
+        procs = sorted(df["Process Name"].dropna().unique().tolist())
         if "Directed Loader" in procs:
-            df_proc = df[df[proc_col] == "Directed Loader"].copy()
+            df_proc = df[df["Process Name"] == "Directed Loader"].copy()
         else:
             # If your site labels it differently (e.g., Container Load), pick the first
-            df_proc = df[df[proc_col] == procs[0]].copy()
-        render_grouped_panel(df_proc, uph_low, uph_cap, process_label="Directed Loader")
+            df_proc = df[df["Process Name"] == procs[0]].copy()
+        render_grouped_panel(df_proc, uph_low, uph_cap)
     else:
         st.info("No 'Process Name' column found.")
 
 # ---- Palletizer tab ----
 with tabs[1]:
-    if "Process Name" in df.columns or "process_name" in df.columns:
-        proc_col = "Process Name" if "Process Name" in df.columns else "process_name"
-        if "Palletizer" in df[proc_col].unique():
-            df_proc = df[df[proc_col] == "Palletizer"].copy()
+    if "Process Name" in df.columns:
+        if "Palletizer" in df["Process Name"].unique():
+            df_proc = df[df["Process Name"] == "Palletizer"].copy()
             render_grouped_panel(df_proc, uph_low, uph_cap, process_label="Palletizer")
         else:
             st.info("No rows with Process Name = 'Palletizer'. Select the correct process name in your export.")
@@ -346,4 +381,3 @@ with tabs[2]:
             st.info("Not enough data to estimate a learning curve for this login.")
     else:
         st.info("This tab activates only for dated CSVs (with columns: date, login, level, hours, units).")
-

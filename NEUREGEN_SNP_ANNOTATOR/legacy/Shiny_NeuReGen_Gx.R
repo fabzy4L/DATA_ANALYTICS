@@ -4,6 +4,8 @@
 # Concepts about Reactive programming used by Shiny, 
 # https://shiny.rstudio.com/articles/reactivity-overview.html
 
+# install.packages(c("shiny", "shinythemes", "jsonlite", "rlang"))
+
 
 # Load R packages
 library(shiny)
@@ -88,6 +90,6 @@ library(shinythemes)
   } # server
   
 
-  # PART 3. INTEGRATION of Shiny object = User Interface & server function defined
+  # PART 3. INTEGRATION of Shiny object = User Interface & server function defineds
   
   shinyApp(ui = ui, server = server)

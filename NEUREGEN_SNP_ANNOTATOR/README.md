@@ -13,9 +13,7 @@ The Genomics Tools SNP Annotation App is an interactive R Shiny application that
 
 ## Screenshot
 
-> *Replace with a screenshot of the running app.*
-
-![App Screenshot](screenshot.png)
+![alt text](image-1.png)
 
 ---
 

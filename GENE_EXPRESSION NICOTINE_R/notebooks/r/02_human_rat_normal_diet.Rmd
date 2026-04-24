@@ -9,11 +9,11 @@ output: html_notebook
 ############################
 ############################
 ############################
-qPCR     <- read.csv("../../data/raw/fold_change/qPCR all values - qPCR.csv")
-H_qPCR   <- read.csv("../../data/raw/fold_change/qPCR all values - qPCR - HUMAN.csv")
-R2_qPCR  <- read.csv("../../data/raw/fold_change/qPCR all values - qPCR - RAT - 2.csv") # JUST RELEVANT GENES (4) (16 C vs 8 N)
-R_qPCR   <- read.csv("../../data/raw/fold_change/qPCR all values - qPCR - RAT.csv")     # ALL GENES W/ READINGS
-A_R_qPCR <- read.csv("../../data/raw/fold_change/qPCR all values - qPCR DATA - ALLRAT.csv") # ALL GENES W/ SOME MISSING READINGS
+qPCR     <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/GENE_EXPRESSION%20NICOTINE_R/data/raw/fold_change/qPCR%20all%20values%20-%20qPCR.csv")
+H_qPCR   <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/GENE_EXPRESSION%20NICOTINE_R/data/raw/fold_change/qPCR%20all%20values%20-%20qPCR%20-%20HUMAN.csv")
+R2_qPCR  <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/GENE_EXPRESSION%20NICOTINE_R/data/raw/fold_change/qPCR%20all%20values%20-%20qPCR%20-%20RAT%20-%202.csv") # JUST RELEVANT GENES (4) (16 C vs 8 N)
+R_qPCR   <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/GENE_EXPRESSION%20NICOTINE_R/data/raw/fold_change/qPCR%20all%20values%20-%20qPCR%20-%20RAT.csv")     # ALL GENES W/ READINGS
+A_R_qPCR <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/GENE_EXPRESSION%20NICOTINE_R/data/raw/fold_change/qPCR%20all%20values%20-%20qPCR%20DATA%20-%20ALLRAT.csv") # ALL GENES W/ SOME MISSING READINGS
 ```
 
 ```{r}

@@ -3,13 +3,21 @@ title: "qPCR"
 output: html_notebook
 ---
 ```{r}
-###################DATA SETS
+
 ############################
+install.packages("installr")
+library(installr)
+install.pandoc()
 ############################
-qPCR <-read.csv("../../data/raw/fold_change/qPCR all values - qPCR.csv")
+
 ```
-
-
+```{r}
+##################DATA SETS
+############################
+############################
+qPCR     <- read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/GENE_EXPRESSION%20NICOTINE_R/data/raw/fold_change/qPCR%20all%20values%20-%20qPCR.csv")
+qPCR
+```
 ```{r}
 ############################
 ################ SUBSETS - HUMAN & NORMAL DIET RAT

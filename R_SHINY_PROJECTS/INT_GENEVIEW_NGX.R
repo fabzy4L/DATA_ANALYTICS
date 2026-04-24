@@ -1,3 +1,11 @@
+
+#install.packages(c("shiny", "data.table", "RCurl", "randomForest", "dplyr", "tidyverse", "biomaRt"))
+#allif (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+#BiocManager::install("biomaRt")
+#install.packages("shinythemes")
+
+library(shinythemes)
 library(shiny)
 library(data.table)
 library(RCurl)
@@ -5,31 +13,50 @@ library(randomForest)
 library(dplyr)
 library(tidyverse)
 library(biomaRt)
+library(DT)
 
-ui <- fluidPage(theme = shinytheme("cosmo"),  
-                titlePanel(h1("GENOMICS TOOLS")), 
-                navbarPage("Genomic Testing",
-                           tabPanel("DATA",
-                                    sidebarLayout(
-                                      sidebarPanel(
-                                        fileInput("file1", "Choose CSV File",
-                                                  accept = c("text/csv",
-                                                             "text/comma-separated-values,text/plain",
-                                                             ".csv")),
-                                        br(),
-                                        actionButton("processBtn", "Process"),
-                                        downloadButton("downloadData", "Download Processed Data")
-                                      ),
-                                      mainPanel(
-                                        h1("Review Information:"), 
-                                        h4("Output:"),
-                                        helpText("Please make sure the file contains 200 RSIDs at a time"),
-                                        h1(" "),
-                                        tableOutput("processedDataTable")
-                                      )
-                                    )
-                           )
-                ))
+ui <- navbarPage(
+  title = "Genomics Tools",
+  theme = shinytheme("cosmo"),
+  tabPanel(
+    "SNP Annotation",
+    sidebarLayout(
+      sidebarPanel(
+        width = 3,
+        h4("Upload RSID Data"),
+        tags$p(tags$small(
+          "Upload a CSV file containing RSIDs (up to 200 at a time). ",
+          "The app queries Ensembl BioMart in real time to retrieve allele ",
+          "frequencies, chromosome locations, associated genes, and phenotype descriptions."
+        )),
+        tags$hr(),
+        fileInput(
+          "file1",
+          label    = NULL,
+          buttonLabel = "Browse...",
+          placeholder = "No file selected",
+          accept   = c("text/csv", "text/comma-separated-values,text/plain", ".csv")
+        ),
+        div(
+          style = "display:flex; gap:8px;",
+          actionButton("processBtn", "Annotate RSIDs", icon = icon("dna"), class = "btn-primary btn-sm"),
+          downloadButton("downloadData", "Export CSV", class = "btn-sm")
+        ),
+        tags$hr(),
+        tags$small(
+          tags$b("Minor Allele Frequency key:"), tags$br(), tags$br(),
+          tags$span(style = "background:#f28b82; padding:2px 10px; border-radius:3px;", "< 0.05  Rare"), tags$br(), tags$br(),
+          tags$span(style = "background:#ffd966; padding:2px 10px; border-radius:3px;", "0.05 – 0.20"), tags$br(), tags$br(),
+          tags$span(style = "background:#81c995; padding:2px 10px; border-radius:3px;", "> 0.20  Common")
+        )
+      ),
+      mainPanel(
+        width = 9,
+        DT::dataTableOutput("processedDataTable")
+      )
+    )
+  )
+)
 
 server <- function(input, output) {
   
@@ -55,12 +82,25 @@ server <- function(input, output) {
     searchResults <- getBM(attributes=att1,
                            filters=filter1,
                            values=dna1, mart=ensembl)
-    
+
+    searchResults$snp <- gsub("%", "", searchResults$snp)
+
     searchResults
   })
   
-  output$processedDataTable <- renderTable({
-    processedData()
+  output$processedDataTable <- DT::renderDataTable({
+    DT::datatable(
+      processedData(),
+      filter = "top",
+      options = list(pageLength = 25, scrollX = TRUE)
+    ) %>%
+      DT::formatStyle(
+        "minor_allele_freq",
+        backgroundColor = DT::styleInterval(
+          c(0.05, 0.2),
+          c("#f28b82", "#ffd966", "#81c995")
+        )
+      )
   })
   
   output$downloadData <- downloadHandler(

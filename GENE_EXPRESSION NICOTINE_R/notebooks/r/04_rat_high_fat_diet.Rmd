@@ -4,7 +4,7 @@ output: html_notebook
 ---
 
 ```{r}
-hf_2PCR <-read.csv("../../data/raw/fold_change/qPCR all values - HIGH FAT.csv")
+hf_2PCR <-read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/GENE_EXPRESSION%20NICOTINE_R/data/raw/fold_change/qPCR%20all%20values%20-%20HIGH%20FAT.csv")
 library(dplyr)
 ```
 

@@ -6,7 +6,7 @@ output: html_notebook
 ###################DATA SETS
 ############################
 ############################
-qPCR <-read.csv("../../data/raw/fold_change/qPCR all values - qPCR.csv")
+qPCR <-read.csv("https://raw.githubusercontent.com/fabzy4L/DATA_ANALYTICS/main/GENE_EXPRESSION%20NICOTINE_R/data/raw/fold_change/qPCR%20all%20values%20-%20qPCR.csv")
 ```
 
 ```{r}

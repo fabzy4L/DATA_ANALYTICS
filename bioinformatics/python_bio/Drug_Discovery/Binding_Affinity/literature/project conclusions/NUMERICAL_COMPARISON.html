@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Numerical Comparison: In Silico vs. In Vitro - Fabian A. Alvarez-Primo, Ph.D.</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 40px auto; padding: 0 20px; background-color: #f9f9f9; }
+        header { border-bottom: 3px solid #2c3e50; margin-bottom: 30px; padding-bottom: 10px; }
+        h1 { color: #2c3e50; font-size: 2em; margin-bottom: 5px; }
+        h2 { color: #2980b9; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 30px; }
+        .author-info { font-style: italic; color: #555; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #2c3e50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .highlight-box { background-color: #e8f4fd; border-left: 5px solid #2980b9; padding: 20px; margin: 20px 0; }
+        .conclusion { background-color: #f1f8e9; border-left: 5px solid #4caf50; padding: 20px; margin-top: 30px; }
+        .math { font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: bold; }
+        footer { margin-top: 50px; text-align: center; font-size: 0.9em; color: #888; border-top: 1px solid #ddd; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Numerical Comparison: Computational Results vs. Experimental Literature</h1>
+    <div class="author-info">Analysis by Fabian A. Alvarez-Primo, Ph.D. | May 1, 2026</div>
+</header>
+
+<p>This report documents a direct comparison between the experimental binding values reported in established peer-reviewed literature and the computational results generated through molecular docking simulations in this project.</p>
+
+<h2>1. Experimental Literature Values (Inhibition Constant, <span class="math">K<sub>i</sub></span>)</h2>
+<p>In experimental pharmacology, the <strong>Inhibition Constant (<span class="math">K<sub>i</sub></span>)</strong> measures the concentration required to occupy 50% of the receptor population. <strong>Lower values indicate higher binding affinity.</strong></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Source</th>
+            <th>&Delta;<sup>9</sup>-THC (<span class="math">K<sub>i</sub></span>)</th>
+            <th>&Delta;<sup>8</sup>-THC (<span class="math">K<sub>i</sub></span>)</th>
+            <th>Observation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Tagen et al. (2022)</strong></td>
+            <td>~25 nM</td>
+            <td>~165 nM</td>
+            <td>&Delta;<sup>9</sup> binds tighter</td>
+        </tr>
+        <tr>
+            <td><strong>Hua et al. (2016)</strong></td>
+            <td>40.7 &plusmn; 1.7 nM</td>
+            <td>47.6 &plusmn; 1.9 nM</td>
+            <td>&Delta;<sup>9</sup> binds tighter</td>
+        </tr>
+    </tbody>
+</table>
+
+<p><em>Literature Consensus:</em> Experimental studies consistently demonstrate that <strong>&Delta;<sup>9</sup>-THC exhibits a higher binding affinity</strong> for the CB1 receptor than its &Delta;<sup>8</sup> isomer in biological systems.</p>
+
+<h2>2. Project Computational Results (Gibbs Free Energy, <span class="math">&Delta;G</span>)</h2>
+<p>In computational docking, the scoring function provides an estimate of the <strong>Gibbs Free Energy (<span class="math">&Delta;G</span>)</strong> of binding. <strong>More negative values indicate higher predicted binding affinity.</strong></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Ligand Isomer</th>
+            <th>Predicted Affinity (<span class="math">&Delta;G</span>)</th>
+            <th>Result Classification</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>&Delta;<sup>8</sup>-Tetrahydrocannabinol</strong></td>
+            <td>-6.5 kcal/mol</td>
+            <td>Predicted Tighter Binder</td>
+        </tr>
+        <tr>
+            <td><strong>&Delta;<sup>9</sup>-Tetrahydrocannabinol</strong></td>
+            <td>-6.3 kcal/mol</td>
+            <td>Predicted Weaker Binder</td>
+        </tr>
+    </tbody>
+</table>
+
+<p><em>Project Consensus:</em> The <i>in silico</i> simulation predicts that <strong>&Delta;<sup>8</sup>-THC has a marginally higher binding affinity</strong> than &Delta;<sup>9</sup>-THC under static conditions.</p>
+
+<div class="highlight-box">
+    <h2>3. Comparative Analysis: The "Inversion of Preference"</h2>
+    <p>A notable divergence exists between the computational predictions and the experimental data. While the literature favors &Delta;<sup>9</sup>-THC, the <strong>AutoDock Vina</strong> algorithm used in this project favors &Delta;<sup>8</sup>-THC by a margin of <strong>0.2 kcal/mol</strong>.</p>
+    
+    <h3>Scientific Rationale:</h3>
+    <ul>
+        <li><strong>Static vs. Dynamic Environments:</strong> The docking simulation utilized a "frozen" crystal structure (PDB: <strong>5TGZ</strong>). In this state, the &Delta;<sup>8</sup> configuration optimizes van der Waals contacts that are prominent in a static model.</li>
+        <li><strong>Entropic Factors:</strong> Biological <span class="math">K<sub>i</sub></span> values account for receptor flexibility and desolvation, which often favor &Delta;<sup>9</sup>-THC in ways static docking cannot.</li>
+        <li><strong>Induced Fit:</strong> &Delta;<sup>9</sup>-THC likely induces a conformational change in the live receptor that maximizes binding—a dynamic effect missing in rigid-receptor docking.</li>
+    </ul>
+</div>
+
+<div class="conclusion">
+    <h2>Conclusion</h2>
+    <p>Dr. Alvarez-Primo's results successfully identify both molecules as thermodynamically favorable binders. The discrepancy between computational preference and experimental data serves as a vital case study in the limitations of <i>in silico</i> screening and emphasizes the need for future <strong>Molecular Dynamics (MD)</strong> validation.</p>
+</div>
+
+<footer>
+    &copy; 2026 Fabian A. Alvarez-Primo, Ph.D. | Computational Bioinformatics Division
+</footer>
+
+</body>
+</html>

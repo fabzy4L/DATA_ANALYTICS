@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 20px auto; padding: 0 20px; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; }
+        h2 { color: #34495e; margin-top: 30px; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
+        .result-box { background: #e8f4fd; padding: 15px; border-left: 5px solid #3498db; margin: 20px 0; }
+        ul { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Project Summary: Binding Affinity & Molecular Docking</h1>
+    
+    <p>This project is a bioinformatics workflow focused on simulating the interaction between ligands and protein receptors to predict binding affinities, specifically targeting the <strong>Cannabinoid Receptor 1 (CB1)</strong>.</p>
+
+    <h2>Project Overview</h2>
+    <ul>
+        <li><strong>AutoDock Vina:</strong> Molecular docking simulation engine.</li>
+        <li><strong>RDKit:</strong> 3D molecular structure generation from SMILES/MOL.</li>
+        <li><strong>OpenBabel:</strong> Chemical format conversion (PDB to PDBQT).</li>
+        <li><strong>VMD:</strong> 3D visualization of docked complexes.</li>
+    </ul>
+
+    <h2>Workflow Execution</h2>
+    <ol>
+        <li><strong>Preparation:</strong> Ligands were converted to 3D PDB via RDKit and then to PDBQT via OpenBabel.</li>
+        <li><strong>Configuration:</strong> Docking was set with a search grid centered at <code>(7.40, -1.60, 1.80)</code>.</li>
+        <li><strong>Simulation:</strong> Automated via <code>autodockvina.py</code> with an exhaustiveness of 8.</li>
+    </ol>
+
+    <h2>Key Results</h2>
+    <div class="result-box">
+        <p>The simulations predicted stable binding interactions for the ligands:</p>
+        <ul>
+            <li><strong>Best Affinity (Run 1):</strong> <code>-6.5 kcal/mol</code></li>
+            <li><strong>Best Affinity (Run 2):</strong> <code>-6.3 kcal/mol</code></li>
+        </ul>
+    </div>
+
+    <h2>Project Structure</h2>
+    <ul>
+        <li><code>scripts/</code>: Python automation for the pipeline.</li>
+        <li><code>structures/</code>: Repository of ligands, receptors, and complexes.</li>
+        <li><code>notebooks/</code>: Interactive molecular preparation.</li>
+        <li><code>visualization/</code>: VMD state files and rendered images.</li>
+    </ul>
+
+</body>
+</html>

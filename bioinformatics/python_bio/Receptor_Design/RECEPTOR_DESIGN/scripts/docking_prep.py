@@ -109,7 +109,6 @@ def write_vina_config(config_path: Path, receptor_pdbqt: Path,
         f.write(f"exhaustiveness = {exhaustiveness}\n")
         f.write(f"num_modes      = {n_poses}\n")
         f.write(f"out            = {output_pdbqt}\n")
-        f.write(f"log            = {output_pdbqt.with_suffix('.log')}\n")
     print(f"  Vina config: {config_path.name}")
 
 def escitalopram_pdbqt_note(ligand_pdbqt_path: Path):
@@ -151,14 +150,18 @@ def check_autodock_vina():
 
 def run_docking(config_path: Path, vina_binary: str):
     import subprocess
+    log_path = config_path.with_suffix(".log")
     print(f"\nRunning: {vina_binary} --config {config_path}")
     result = subprocess.run(
         [vina_binary, "--config", str(config_path)],
         capture_output=True, text=True
     )
-    print(result.stdout)
+    combined = result.stdout + result.stderr
+    print(combined)
+    with open(log_path, "w") as f:
+        f.write(combined)
     if result.returncode != 0:
-        print(f"ERROR: {result.stderr}")
+        print(f"Vina exit code: {result.returncode}")
     return result.returncode == 0
 
 def parse_vina_results(log_path: Path):
@@ -251,8 +254,8 @@ if __name__ == "__main__":
         print(f"  Found: {vina_bin}")
         run_docking(wt_conf,    vina_bin)
         run_docking(s348t_conf, vina_bin)
-        wt_results    = parse_vina_results(out_wt.with_suffix(".log"))
-        s348t_results = parse_vina_results(out_s348t.with_suffix(".log"))
+        wt_results    = parse_vina_results(wt_conf.with_suffix(".log"))
+        s348t_results = parse_vina_results(s348t_conf.with_suffix(".log"))
         print_docking_comparison(wt_results, s348t_results)
     else:
         if not vina_bin:

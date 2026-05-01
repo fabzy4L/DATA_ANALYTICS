@@ -1,0 +1,97 @@
+SERT + Escitalopram Docking Results
+AutoDock Vina 1.2.5 | Generated 2026-05-01
+======================================================================
+
+SETUP
+  Receptor WT : data/structures/5i6z_A_true.pdb (chain A from 5I6Z, 544 residues)
+  Receptor Mut: data/structures/5i6z_A_S348T_correct.pdb (ALA348->THR, g+ rotamer)
+  Ligand      : output/escitalopram.pdb (RDKit-generated 3D conformation)
+  Box center  : x=33.06, y=187.25, z=141.04 (S1 site centroid, Coleman 2016)
+  Box size    : 25 x 25 x 25 Angstrom
+  Exhaustiveness: 8 | Poses: 10
+
+----------------------------------------------------------------------
+WILD-TYPE (ALA348) — 10 poses
+
+  mode | affinity (kcal/mol) | RMSD lb | RMSD ub
+  -----+---------------------+---------+---------
+     1 |       -8.116        |  0.000  |  0.000
+     2 |       -8.031        |  3.481  |  5.612
+     3 |       -7.774        |  3.340  |  3.802
+     4 |       -7.722        |  2.521  |  5.711
+     5 |       -7.660        |  3.284  |  4.776
+     6 |       -7.647        |  3.421  |  5.459
+     7 |       -7.613        |  4.322  |  6.640
+     8 |       -7.560        |  3.216  |  6.395
+     9 |       -7.520        |  3.885  |  5.482
+    10 |       -7.459        |  3.556  |  5.532
+
+  Best pose: -8.116 kcal/mol
+
+----------------------------------------------------------------------
+S348T MUTANT (THR348) — 10 poses
+
+  mode | affinity (kcal/mol) | RMSD lb | RMSD ub
+  -----+---------------------+---------+---------
+     1 |       -8.089        |  0.000  |  0.000
+     2 |       -8.059        |  3.476  |  5.602
+     3 |       -7.900        |  2.841  |  5.509
+     4 |       -7.795        |  3.317  |  3.774
+     5 |       -7.620        |  3.556  |  5.672
+     6 |       -7.573        |  3.038  |  4.752
+     7 |       -7.560        |  3.899  |  5.417
+     8 |       -7.436        |  4.189  |  6.947
+     9 |       -7.415        |  3.752  |  6.377
+    10 |       -7.371        |  4.130  |  5.867
+
+  Best pose: -8.089 kcal/mol
+
+----------------------------------------------------------------------
+COMPARISON
+
+  WT best affinity    : -8.116 kcal/mol
+  S348T best affinity : -8.089 kcal/mol
+  Delta G (S348T - WT): +0.027 kcal/mol
+
+  S348T shows marginally REDUCED binding affinity vs WT.
+  Delta G = +0.027 kcal/mol is within Vina's scoring noise (~0.5 kcal/mol).
+
+----------------------------------------------------------------------
+INTERPRETATION
+
+The mutation introduces a gamma-methyl group (Thr vs Ala) at position 348.
+The very small computed delta G (+0.027 kcal/mol) suggests minimal steric
+impact at this level of analysis. This is consistent with position 348 being
+relatively peripheral to the core S1 binding pocket (centroid-to-res348 CA
+distance ~6 Angstrom).
+
+The prior "Methyl Clash" hypothesis (estimated 175-fold Ki increase based on
+analogy with S438T) is NOT supported by this direct docking result. However:
+
+  1. The analogy used (S438T) refers to a DIFFERENT residue that is more
+     central to the S1 binding pocket.
+  2. Position 348 in 5I6Z is ALA (not SER as in the biological WT). The
+     true comparison point for S348T should start from a SER-348 structure.
+  3. These charges are simplified approximations; Gasteiger charges via
+     openbabel would improve accuracy.
+  4. Higher exhaustiveness (e.g., 32) and multiple seeds are recommended
+     before drawing conclusions.
+
+----------------------------------------------------------------------
+NEXT STEPS TO STRENGTHEN RESULTS
+
+  1. Re-run with exhaustiveness=32 for more thorough sampling:
+       vina --config output/vina_wt.conf --exhaustiveness 32
+       vina --config output/vina_s348t.conf --exhaustiveness 32
+
+  2. Regenerate ligand PDBQT with proper Gasteiger charges:
+       obabel output/escitalopram.pdb -O output/escitalopram.pdbqt
+              --partialcharge gasteiger -h
+
+  3. Use 5I71 co-crystallized (R)-citalopram pose (residue 68P) as
+     starting pose reference to validate box placement.
+
+  4. Build a SER348 starting model (canonical biological WT) and repeat.
+
+  5. Energy minimize the S348T model in ChimeraX before docking:
+       Run scripts/S348T_Minimization_Workflow.cxc

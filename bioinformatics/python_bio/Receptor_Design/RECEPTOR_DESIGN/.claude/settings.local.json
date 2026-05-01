@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Fabian Alvarez-Primo\\\\Documents\\\\Github\\\\DATA_ANALYTICS\\\\bioinformatics\\\\python_bio\\\\Receptor_Design\\\\RECEPTOR_DESIGN\" -Recurse)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Format-Table -AutoSize)"
+    ]
+  }
+}

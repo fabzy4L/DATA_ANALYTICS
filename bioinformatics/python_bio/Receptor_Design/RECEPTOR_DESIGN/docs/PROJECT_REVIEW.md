@@ -1,47 +1,55 @@
-# RECEPTOR_DESIGN — Project Review
+# RECEPTOR_DESIGN — Project Review (Updated 2026-05-01)
 
 ## Project Overview
 
-**Goal:** Structural investigation of the Serotonin Transporter (SERT) — specifically how point mutations at position S348 affect Escitalopram (SSRI antidepressant) binding.
+**Goal:** Structural investigation of the Serotonin Transporter (SERT) and how the A348T point mutation (referred to as S348T in biological sequence conventions) affects Escitalopram binding affinity.
+
+**Authoritative output:** `docs/research_article.md` / `docs/research_article.html`
 
 ---
 
-## What's Been Completed
+## Current Status
 
-| Area | Status |
-|---|---|
-| Wild-type SERT structures (5I6Z, 5I71, 2A65) | Downloaded and organized |
-| Chain A isolation + FASTA sequences | Done |
-| In-silico mutations S348T and S348A | Generated (`.pdb` files present) |
-| Escitalopram 3D structure | Generated via RDKit in notebook |
-| Reverse translation pipeline | Implemented (AA → DNA, 1,980 nt output) |
-| ChimeraX visualization sessions | 2 sessions built (56 MB + 13 MB) |
-
----
-
-## Current Gaps
-
-1. **`scripts/` folder is empty** — all code lives in notebooks; no standalone `.py` scripts yet.
-2. **`Annotations.txt` is blank** — placeholder with no content.
-3. **No docking analysis** — the Escitalopram `.pdb` is generated but hasn't been docked against the SERT structures computationally.
-4. **No MD simulations** — listed as a future goal in `WORKFLOW.md` but not started.
-5. **`5I6Z_edited.fasta`** appears identical to `5I6Z.fasta` — unclear if the intended mutation was saved.
+| Area | Status | Output |
+|---|---|---|
+| Wild-type structures (5I6Z, 5I71, 2A65) | Done | `data/structures/` |
+| Structural audit & provenance correction | Done | `scripts/structural_audit.py`, `data/structures/5i6z_A_true.pdb` |
+| In-silico mutagenesis (A348T, g+ rotamer) | Done | `data/structures/5i6z_A_S348T_correct.pdb` |
+| Escitalopram 3D structure | Done | `output/escitalopram.pdb` |
+| Ligand PDBQT preparation | Done | `output/escitalopram.pdbqt` |
+| Receptor PDBQT preparation | Done | `output/receptor_wt.pdbqt`, `output/receptor_s348t.pdbqt` |
+| Molecular docking (AutoDock Vina 1.2.5) | Done | `output/docked_wt.pdbqt`, `output/docked_s348t.pdbqt` |
+| Reverse translation pipeline | Done | `notebooks/REVERSE TRANSLATION.ipynb` |
+| Research article | Done | `docs/research_article.md/.html` |
 
 ---
 
-## Structural Focus
+## Key Results
 
-- **Wild-type:** `5i6z_A.pdb` (Chain A, SERT only)
-- **Mutants:** `5i6Z_S348T_3.pdb` and `5i6Z_S348_A.pdb`
-- **Ligand:** `output/escitalopram.pdb`
-- **Comparison session:** `2a65_v_516z.cxs` (likely comparing the 2001 LeuT homolog vs modern SERT crystal)
+| Metric | WT (ALA348) | A348T (THR348) |
+|---|---|---|
+| Best docking affinity | −8.116 kcal/mol | −8.089 kcal/mol |
+| ΔΔG | — | +0.027 kcal/mol |
+| TM6 backbone RMSD | — | 0.000 Å |
+| TM6 H-bonds (340–360) | 102 | — |
+| Atomic contacts at res. 348 | 154 | — |
+
+**Conclusion:** A348T produces no statistically significant change in escitalopram binding affinity at current sampling depth.
 
 ---
 
-## Next Steps
+## Important Correction
 
-Based on `WORKFLOW.md` Phase 5 and future goals, the natural next steps would be:
+Early analysis files (in `docs/archive/`) were produced using structural inputs
+that did not originate from 5I6Z (37 Å TM6 RMSD vs. raw PDB). Those findings
+are superseded. See `docs/STRUCTURAL_AUDIT_FINDINGS.md` for full details.
 
-1. **Docking** — run Escitalopram against WT and mutant SERT (AutoDock Vina or Glide)
-2. **Annotation** — populate `Annotations.txt` with mutation rationale and observations from ChimeraX
-3. **Refactor notebooks → scripts** — move the RDKit and reverse translation code into `scripts/` as `.py` files
+---
+
+## Remaining Work
+
+1. Re-run docking at exhaustiveness = 32 with multiple seeds
+2. Regenerate ligand PDBQT with OpenBabel Gasteiger charges
+3. Run ChimeraX energy minimization (`scripts/S348T_Minimization_Workflow.cxc`)
+4. Build canonical SER348 homology model from UniProt P31645
+5. MD simulation (100 ns, explicit POPC bilayer)

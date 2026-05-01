@@ -1,16 +1,7 @@
 ---
 title: "qPCR"
 output: html_notebook
----
-```{r}
 
-############################
-install.packages("installr")
-library(installr)
-install.pandoc()
-############################
-
-```
 ```{r}
 ##################DATA SETS
 ############################

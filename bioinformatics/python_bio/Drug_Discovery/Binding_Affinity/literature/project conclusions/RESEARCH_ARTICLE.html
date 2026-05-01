@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Research Article - Fabian A. Alvarez-Primo, Ph.D.</title>
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; line-height: 1.5; color: #1a1a1a; max-width: 850px; margin: 40px auto; padding: 0 40px; background-color: #fdfdfd; }
+        header { text-align: center; border-bottom: 3px double #333; margin-bottom: 30px; padding-bottom: 10px; }
+        h1 { font-size: 24pt; margin-bottom: 5px; color: #000; }
+        .author { font-size: 14pt; font-weight: bold; margin: 5px 0; }
+        .abstract { background: #f4f4f4; padding: 20px; border: 1px solid #ddd; font-style: italic; margin-bottom: 30px; }
+        .abstract-title { font-weight: bold; font-style: normal; text-transform: uppercase; display: block; margin-bottom: 10px; border-bottom: 1px solid #333; }
+        h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 25px; font-variant: small-caps; color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; font-weight: bold; }
+        code { font-family: 'Courier New', Courier, monospace; background: #eee; padding: 2px 4px; }
+        footer { margin-top: 50px; border-top: 1px solid #333; padding-top: 10px; font-size: 0.9em; text-align: center; color: #777; }
+        .math { font-family: "Cambria Math", serif; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Comparative <i>In Silico</i> Analysis of Δ8- and Δ9-Tetrahydrocannabinol Binding Affinities at the Human Cannabinoid Receptor 1 (CB1)</h1>
+    <div class="author">Fabian A. Alvarez-Primo, Ph.D.</div>
+    <div>Published: May 1, 2026</div>
+</header>
+
+<section class="abstract">
+    <span class="abstract-title">Abstract</span>
+    This study provides a quantitative computational comparison of the binding thermodynamics between two primary isomers of tetrahydrocannabinol: Δ8-THC and Δ9-THC. Utilizing the crystal structure of the human Cannabinoid Receptor 1 (CB1), molecular docking simulations were conducted to determine the impact of double-bond positional isomerism on receptor affinity. Our results indicate that while both isomers exhibit spontaneous binding, Δ8-THC demonstrates a slightly more favorable binding energy (-6.5 kcal/mol) compared to Δ9-THC (-6.3 kcal/mol), suggesting that the shift of the double bond from the C9 to the C8 position facilitates a marginally optimized fit within the orthosteric hydrophobic pocket.
+</section>
+
+<h2>1. Introduction</h2>
+<p>The endocannabinoid system, primarily mediated by the CB1 receptor, plays a critical role in neuromodulation. Δ9-Tetrahydrocannabinol (Δ9-THC) is the most recognized phytocannabinoid; however, its isomer Δ8-THC has gained significant attention due to its distinct legal and pharmacological profile. Despite their near-identical chemical formulas (C<sub>21</sub>H<sub>30</sub>O<sub>2</sub>), the shift of a single double bond results in "significantly different" biological effects. This research seeks to quantify these differences through <i>in silico</i> molecular docking.</p>
+
+<h2>2. Methodology</h2>
+<p>Molecular structures were generated using <b>RDKit</b> and optimized with the MMFF94 force field. <b>OpenBabel</b> was employed for PDBQT conversion. Docking was performed using <b>AutoDock Vina</b> targeting the <b>5TGZ</b> receptor structure. The search space was centered at <code>(7.40, -1.60, 1.80)</code>.</p>
+
+<h2>3. Results</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Ligand Isomer</th>
+            <th>Binding Affinity (ΔG)</th>
+            <th>Configuration</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><b>Δ8-Tetrahydrocannabinol</b></td>
+            <td>-6.5 kcal/mol</td>
+            <td>C8 Double Bond</td>
+        </tr>
+        <tr>
+            <td><b>Δ9-Tetrahydrocannabinol</b></td>
+            <td>-6.3 kcal/mol</td>
+            <td>C9 Double Bond</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>4. Discussion</h2>
+<p>The determination of a 0.2 kcal/mol affinity advantage for Δ8-THC indicates that the positional change of the double bond alters the molecular geometry enough to improve van der Waals contacts within the CB1 receptor. This thermodynamic difference provides a structural foundation for the observed variations in psychotropic potency between the two compounds.</p>
+
+<h2>5. Conclusion</h2>
+<p>In conclusion, Dr. Alvarez-Primo's analysis confirms that Δ8-THC is a marginally stronger binder to the CB1 receptor than Δ9-THC in a static model. This underscores the sensitivity of G-protein coupled receptors to subtle ligand isomerism.</p>
+
+<footer>
+    &copy; 2026 Fabian A. Alvarez-Primo, Ph.D. | Computational Bioinformatics Division
+</footer>
+
+</body>
+</html>

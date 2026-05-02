@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Fabian Alvarez-Primo\\\\Documents\\\\Github\\\\DATA_ANALYTICS\\\\certificates\\\\biocode\" -Recurse -Force)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "Bash(Format-Table -AutoSize)",
+      "PowerShell(\\(Get-ChildItem -Path \"C:\\\\Users\\\\Fabian Alvarez-Primo\\\\Documents\\\\Github\\\\DATA_ANALYTICS\\\\certificates\\\\biocode\" -Recurse -Force | Measure-Object\\).Count)",
+      "Bash(cat)",
+      "Read(//tmp/**)",
+      "PowerShell(python \"C:\\\\Users\\\\Fabian Alvarez-Primo\\\\Documents\\\\Github\\\\DATA_ANALYTICS\\\\certificates\\\\biocode\\\\Vaccinology\\\\analysis\\\\04_construct_design\\\\build_construct.py\")"
+    ]
+  }
+}

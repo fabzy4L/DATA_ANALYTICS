@@ -1,8 +1,8 @@
 """
-Docking preparation pipeline for SERT + Escitalopram.
+Docking preparation pipeline for SERT + Escitalopram (S438T study).
 
-Generates PDBQT files for receptor and ligand and writes an AutoDock Vina
-config file using the binding pocket centroid computed by structural_audit.py.
+Generates PDBQT files for WT and S438T receptors and writes AutoDock Vina
+config files using the S1 binding pocket centroid from structural_audit.py.
 
 Requirements:
   pip install biopython numpy
@@ -10,9 +10,12 @@ Requirements:
   Place vina.exe (Windows) in scripts/ or add it to PATH.
 
 Usage:
-  python docking_prep.py
-  vina --config output/vina_wt.conf --out output/docked_wt.pdbqt
-  vina --config output/vina_s348t.conf --out output/docked_s348t.pdbqt
+  python scripts/docking_prep.py
+  vina --config output/vina_wt.conf
+  vina --config output/vina_s438t.conf
+
+For multi-seed publication-grade runs (exhaustiveness=32):
+  python scripts/docking_multiseed.py
 """
 
 import sys
@@ -184,23 +187,21 @@ def parse_vina_results(log_path: Path):
                     continue
     return results
 
-def print_docking_comparison(wt_results, s348t_results):
+def print_docking_comparison(wt_results, s438t_results):
     print("\n" + "=" * 60)
     print("DOCKING RESULTS: ESCITALOPRAM BINDING AFFINITY")
     print("=" * 60)
-    for label, results in [("WT (ALA348)", wt_results), ("S348T (THR348)", s348t_results)]:
+    for label, results in [("WT (SER438)", wt_results), ("S438T (THR438)", s438t_results)]:
         if results:
             best = results[0]["affinity_kcal_mol"]
             print(f"  {label}: best pose = {best:.2f} kcal/mol")
         else:
             print(f"  {label}: no results")
-    if wt_results and s348t_results:
-        delta = s348t_results[0]["affinity_kcal_mol"] - wt_results[0]["affinity_kcal_mol"]
-        print(f"\n  Delta G (S348T - WT): {delta:+.2f} kcal/mol")
-        if delta > 0:
-            print("  Interpretation: S348T REDUCES binding affinity (less negative = weaker binding)")
-        else:
-            print("  Interpretation: S348T IMPROVES binding affinity")
+    if wt_results and s438t_results:
+        delta = s438t_results[0]["affinity_kcal_mol"] - wt_results[0]["affinity_kcal_mol"]
+        print(f"\n  Delta-Delta-G (S438T - WT): {delta:+.3f} kcal/mol")
+        print(f"  Note: differences < 0.5 kcal/mol are within Vina scoring noise.")
+        print(f"  For publication-grade results run: python scripts/docking_multiseed.py")
 
 if __name__ == "__main__":
     print("SERT + Escitalopram Docking Preparation")
@@ -209,24 +210,23 @@ if __name__ == "__main__":
     # Receptor files — use correctly generated mutants if available,
     # fall back to old files for now
     wt_pdb    = STRUCTURES / "5i6z_A_true.pdb"
-    s348t_pdb = STRUCTURES / "5i6z_A_S348T_correct.pdb"
+    s438t_pdb = STRUCTURES / "5i6z_A_S438T.pdb"
 
     if not wt_pdb.exists():
         print("ERROR: Run structural_audit.py first to extract 5i6z_A_true.pdb")
         sys.exit(1)
 
-    if not s348t_pdb.exists():
-        print("WARNING: 5i6z_A_S348T_correct.pdb not found.")
-        print("  Run generate_mutants.cxc in ChimeraX first.")
-        print("  Falling back to existing S348T file (may be incorrect).")
-        s348t_pdb = STRUCTURES / "5i6Z_S348T_3.pdb"
+    if not s438t_pdb.exists():
+        print("ERROR: 5i6z_A_S438T.pdb not found.")
+        print("  Run scripts/generate_s438t.py first to generate the S438T mutant.")
+        sys.exit(1)
 
     # Convert receptors to PDBQT
     print("\n1. Preparing receptor PDBQT files...")
     wt_pdbqt    = OUTPUT / "receptor_wt.pdbqt"
-    s348t_pdbqt = OUTPUT / "receptor_s348t.pdbqt"
+    s438t_pdbqt = OUTPUT / "receptor_s438t.pdbqt"
     pdb_to_pdbqt_receptor(wt_pdb,    wt_pdbqt)
-    pdb_to_pdbqt_receptor(s348t_pdb, s348t_pdbqt)
+    pdb_to_pdbqt_receptor(s438t_pdb, s438t_pdbqt)
 
     # Ligand
     print("\n2. Ligand preparation...")
@@ -240,12 +240,12 @@ if __name__ == "__main__":
     # Vina config files
     print("\n3. Writing AutoDock Vina config files...")
     wt_conf    = OUTPUT / "vina_wt.conf"
-    s348t_conf = OUTPUT / "vina_s348t.conf"
+    s438t_conf = OUTPUT / "vina_s438t.conf"
     out_wt     = OUTPUT / "docked_wt.pdbqt"
-    out_s348t  = OUTPUT / "docked_s348t.pdbqt"
+    out_s438t  = OUTPUT / "docked_s438t.pdbqt"
 
     write_vina_config(wt_conf,    wt_pdbqt,    ligand_pdbqt, out_wt,    BOX_CENTER, BOX_SIZE)
-    write_vina_config(s348t_conf, s348t_pdbqt, ligand_pdbqt, out_s348t, BOX_CENTER, BOX_SIZE)
+    write_vina_config(s438t_conf, s438t_pdbqt, ligand_pdbqt, out_s438t, BOX_CENTER, BOX_SIZE)
 
     # Try to run docking if vina is available and ligand is ready
     print("\n4. Checking for AutoDock Vina binary...")
@@ -253,10 +253,10 @@ if __name__ == "__main__":
     if vina_bin and ligand_pdbqt.exists():
         print(f"  Found: {vina_bin}")
         run_docking(wt_conf,    vina_bin)
-        run_docking(s348t_conf, vina_bin)
+        run_docking(s438t_conf, vina_bin)
         wt_results    = parse_vina_results(wt_conf.with_suffix(".log"))
-        s348t_results = parse_vina_results(s348t_conf.with_suffix(".log"))
-        print_docking_comparison(wt_results, s348t_results)
+        s438t_results = parse_vina_results(s438t_conf.with_suffix(".log"))
+        print_docking_comparison(wt_results, s438t_results)
     else:
         if not vina_bin:
             print("  AutoDock Vina not found.")
@@ -270,6 +270,8 @@ if __name__ == "__main__":
         print("  3. Re-run: python scripts/docking_prep.py")
         print("\n  OR run docking manually:")
         print(f"     vina --config output/vina_wt.conf")
-        print(f"     vina --config output/vina_s348t.conf")
+        print(f"     vina --config output/vina_s438t.conf")
+        print("\n  For publication-grade runs (exhaustiveness=32, 5 seeds):")
+        print(f"     python scripts/docking_multiseed.py")
 
     print("\nDone. Output files in:", OUTPUT)

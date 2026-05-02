@@ -31,8 +31,8 @@ ROOT    = Path(__file__).resolve().parents[1]
 OUTPUT  = ROOT / "output"
 SCRIPTS = ROOT / "scripts"
 
-WT_PDBQT    = OUTPUT / "receptor_wt.pdbqt"
-S438T_PDBQT = OUTPUT / "receptor_s438t.pdbqt"
+WT_PDBQT    = OUTPUT / "receptor_wt_H.pdbqt"
+S438T_PDBQT = OUTPUT / "receptor_s438t_minimized_H.pdbqt"
 LIG_PDBQT   = OUTPUT / "escitalopram.pdbqt"
 REPORT      = OUTPUT / "multiseed_docking_report.txt"
 

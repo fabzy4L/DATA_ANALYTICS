@@ -34,7 +34,7 @@ A major distinction discovered in the 5I6Z structure is the **allosteric site**.
 ## 4. Why This Comparison Matters for Receptor Design
 1. **Template Validation:** Because 2A65 has much higher resolution, it is used to validate the side-chain orientations in lower-resolution human models.
 2. **Drug Mechanism:** Comparing these structures shows how an inhibitor (like citalopram in 5I6Z) prevents the protein from reaching the occluded state (seen in 2A65), thereby halting serotonin reuptake.
-3. **Mutation Mapping:** Understanding the conserved residues between LeuT and hSERT allows us to predict the impact of mutations like **S348T** based on their equivalent positions in the high-resolution bacterial model.
+3. **Mutation Mapping:** Understanding the conserved residues between LeuT and hSERT allows us to predict the impact of mutations like **S438T** based on their equivalent positions in the high-resolution bacterial model.
 
 ---
-*Generated as a theoretical supplement to the ChimeraX session: 2a65_v_516z.cxs*
+*Theoretical supplement to the ChimeraX session: 2a65_v_516z.cxs*

@@ -129,7 +129,7 @@
     </header>
 
     <div class="abstract">
-        <strong>Abstract:</strong> The human Serotonin Transporter (SERT, <em>SLC6A4</em>) is a pivotal membrane protein responsible for the termination of serotonergic signaling through the reuptake of serotonin from the synaptic cleft. As the primary molecular target for selective serotonin reuptake inhibitors (SSRIs), SERT has been the subject of intensive structural and pharmacological research. This review synthesizes current knowledge on the molecular architecture of SERT, the binding mechanism of escitalopram, and the impact of site-specific mutations on ligand affinity. We compare the well-documented "steric clash" induced by the S438T mutation in the S1 binding pocket with recent computational findings on the A348T mutation in transmembrane helix 6 (TM6). By integrating X-ray crystallographic data, in-silico mutagenesis, and molecular docking, we provide a comprehensive perspective on the structural determinants of SSRI sensitivity.
+        <strong>Abstract:</strong> The human Serotonin Transporter (SERT, <em>SLC6A4</em>) is a pivotal membrane protein responsible for the termination of serotonergic signaling through the reuptake of serotonin from the synaptic cleft. As the primary molecular target for selective serotonin reuptake inhibitors (SSRIs), SERT has been the subject of intensive structural and pharmacological research. This review synthesizes current knowledge on the molecular architecture of SERT, the binding mechanism of escitalopram, and the impact of site-specific mutations on ligand affinity. By integrating X-ray crystallographic data, in-silico mutagenesis, and molecular docking, we provide a comprehensive computational perspective on the S438T mutation and its consequences for SSRI binding affinity, and discuss why rigid-receptor docking underestimates the experimentally observed steric clash.
     </div>
 
     <section>
@@ -159,9 +159,9 @@
         <p>A landmark study by Andersen et al. (2009) identified Ser-438 as a critical determinant for antidepressant recognition [4]. The substitution of Serine with Threonine (S438T) introduces a single γ-methyl group into the S1 pocket. Experimental data shows that this "minimal" change results in a 175-fold to 2000-fold decrease in binding affinity for citalopram and escitalopram [4, 12].</p>
         <p>This phenomenon, termed the <strong>"Methyl Clash,"</strong> arises because the additional methyl group of Threonine-438 physically occupies the space required by the dimethylaminopropyl chain of the drug. Interestingly, serotonin transport is largely preserved in the S438T mutant, as the substrate lacks the bulky substituents that clash with the threonine side chain [12].</p>
 
-        <h3>3.2 Computational Assessment of A348T</h3>
-        <p>In contrast to the central S438T mutation, recent computational analysis of the <strong>A348T</strong> substitution (position 348 in TM6) demonstrates a different outcome. In the 5I6Z structural context, residue 348 is located on the periphery of the S1 binding pocket, approximately 6 Å from the pocket centroid.</p>
-        <p>Molecular docking using AutoDock Vina 1.2.5 yielded a binding free energy change (&Delta;&Delta;G) of only +0.027 kcal/mol for the A348T mutant relative to the wild-type [13]. This finding suggests that position 348 does not constitute a primary steric determinant of escitalopram affinity. The dense local environment (154 atomic contacts within 4.0 Å) indicates that residue 348 is structurally constrained but geographically isolated from the ligand-binding core [13].</p>
+        <h3>3.2 Computational Assessment of S438T</h3>
+        <p>To complement the experimental record, the S438T substitution was modeled <em>in silico</em> using chain A of the 5I6Z crystal structure. Serine 438 was replaced with Threonine via the NERF algorithm, placing the &gamma;-methyl group in the g+ rotamer (&chi;1 = +60&deg;), the statistically favored conformation for threonine in transmembrane helices.</p>
+        <p>Molecular docking of escitalopram with AutoDock Vina 1.2.5 (exhaustiveness = 8, 10 poses) yielded best-pose binding free energies of &minus;8.1 kcal/mol for the wild-type (SER438) and &minus;8.3 kcal/mol for the S438T mutant (THR438), a &Delta;&Delta;G of &minus;0.2 kcal/mol [13]. This marginal shift &mdash; below Vina&rsquo;s scoring noise floor of ~0.5 kcal/mol &mdash; indicates that rigid-receptor docking does not reproduce the 320-fold affinity loss observed experimentally by Andersen et al. The most probable explanation is that the steric clash manifests through desolvation penalties, disruption of Na<sup>+</sup> coordination at S438, and induced-fit rearrangements that are invisible in a static-receptor snapshot.</p>
     </section>
 
     <section>
@@ -176,7 +176,7 @@
 
     <section>
         <h2>5. Conclusion and Future Perspectives</h2>
-        <p>The structural biology of SERT reveals a nuanced landscape where even single-atom substitutions can dictate pharmacological response. While mutations in the central S1 pocket (like S438T) trigger profound steric clashes that abolish SSRI potency, peripheral residues like 348 appear to serve as structural scaffolds with minimal direct impact on drug binding.</p>
+        <p>The structural biology of SERT reveals a nuanced landscape where even single-atom substitutions can dictate pharmacological response. While mutations in the central S1 pocket (like S438T) trigger profound steric clashes that abolish SSRI potency under experimental conditions, rigid-receptor computational models underestimate this effect &mdash; a finding that underscores the necessity of flexible-receptor and MD-based methods for mechanistic SSRI studies.</p>
         <p>Future research should focus on:</p>
         <ol>
             <li><strong>Dynamic Ensembles:</strong> Moving beyond static docking to MD-based re-scoring (MM-GBSA) to capture receptor flexibility.</li>
@@ -201,7 +201,7 @@
             <li>Landrum, G., et al. (2023). RDKit: Open-Source Cheminformatics Software.</li>
             <li>Plenge, P., et al. (2020). The mechanism of a high-affinity allosteric inhibitor of the serotonin transporter. <em>Nature Communications</em>, 11, 1491.</li>
             <li>Andersen, J., et al. (2011). Molecular basis for selective serotonin reuptake inhibitor binding to SERT. <em>Journal of Biological Chemistry</em>, 286, 27834–27843.</li>
-            <li>Alvarez-Primo, F.A. (2026). Structural and Computational Analysis of the S348T Mutation in Human SERT. <em>Internal Project Document</em>.</li>
+            <li>Alvarez-Primo, F.A. (2026). Structural and Computational Analysis of the S438T Mutation in the Human Serotonin Transporter. <em>Internal Project Document</em>.</li>
         </ol>
     </section>
 </div>

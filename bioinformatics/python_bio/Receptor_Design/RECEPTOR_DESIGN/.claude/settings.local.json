@@ -11,7 +11,8 @@
       "PowerShell(cd \"C:\\\\Users\\\\Fabian Alvarez-Primo\\\\Documents\\\\Github\\\\DATA_ANALYTICS\\\\bioinformatics\\\\python_bio\\\\Receptor_Design\\\\RECEPTOR_DESIGN\"; $env:PYTHONIOENCODING=\"utf-8\"; python scripts/generate_mutants.py 2>&1)",
       "PowerShell(cd \"C:\\\\Users\\\\Fabian Alvarez-Primo\\\\Documents\\\\Github\\\\DATA_ANALYTICS\\\\bioinformatics\\\\python_bio\\\\Receptor_Design\\\\RECEPTOR_DESIGN\"; $env:PYTHONIOENCODING=\"utf-8\"; python scripts/generate_ligand_pdbqt.py 2>&1; Write-Host \"---\"; python scripts/docking_prep.py 2>&1)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git mv *)"
     ]
   }
 }

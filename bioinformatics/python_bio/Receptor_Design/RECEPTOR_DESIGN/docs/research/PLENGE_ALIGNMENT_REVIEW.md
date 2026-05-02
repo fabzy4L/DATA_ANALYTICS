@@ -1,6 +1,6 @@
 # Comparative Review: Computational S438T Docking vs. Experimental Findings (Plenge 2020 & Andersen 2009)
 
-**Author:** Gemini CLI / Fabian A. Alvarez-Primo, Ph.D.  
+**Author:** Fabian A. Alvarez-Primo, Ph.D.  
 **Date:** May 1, 2026  
 **Subject:** Alignment of <i>in-silico</i> results with *Nature Communications* 11, 1491 and *J. Biol. Chem.* 284, 10276.
 

@@ -29,7 +29,7 @@ The wild-type receptor was derived from chain A of PDB 5I6Z. The **S438T** mutat
 The 3D structure of **escitalopram** was geometry-optimized and converted to PDBQT format. Torsional degrees of freedom were assigned to the propyl-amine chain and the fluorophenyl ring to allow conformational flexibility during docking.
 
 ### 2.3 Molecular Docking
-Docking was performed using **AutoDock Vina 1.2.5**. The grid box was centered on the S1 binding pocket (33.06, 187.25, 141.04) with dimensions of 25 × 25 × 25 Å. An exhaustiveness setting of 8 was used to generate 10 poses for both the wild-type (SER438) and the mutant (THR438) receptors.
+Docking was performed using **AutoDock Vina 1.2.5**. The grid box was centered on the S1 binding pocket (33.06, 187.25, 141.04) with dimensions of 25 × 25 × 25 Å. To obtain statistically robust affinity estimates, docking was run with exhaustiveness=32 across 5 independent random seeds (42, 123, 456, 789, 1001) for both the wild-type (SER438) and the mutant (THR438) receptors. Mean best-pose affinity ± standard deviation was reported across seeds.
 
 ---
 
@@ -39,26 +39,28 @@ Docking was performed using **AutoDock Vina 1.2.5**. The grid box was centered o
 
 The docking results for escitalopram are summarized in the table below.
 
-| Receptor State | Residue 438 | Best Affinity (kcal/mol) |
-| :--- | :---: | :---: |
-| Wild-Type | SER | −8.1 |
-| **S438T Mutant** | **THR** | **−8.3** |
+| Receptor State | Residue 438 | Mean Affinity ± SD (kcal/mol) | n |
+| :--- | :---: | :---: | :---: |
+| Wild-Type | SER | −8.575 ± 0.013 | 5 |
+| **S438T Mutant** | **THR** | **−8.324 ± 0.012** | 5 |
 
-The S438T mutation resulted in a marginal increase in predicted binding affinity ($\Delta\Delta G = -0.2$ kcal/mol). In the 5I6Z crystal conformation, the additional methyl group of Threonine 438 does not sterically ablate escitalopram binding — the ligand accommodates the substitution within the S1 pocket geometry.
+(exhaustiveness=32; seeds=[42, 123, 456, 789, 1001])
+
+The S438T mutation resulted in a marginal decrease in predicted binding affinity ($\Delta\Delta G = +0.251$ kcal/mol). In the 5I6Z crystal conformation, the additional methyl group of Threonine 438 does not sterically ablate escitalopram binding — the ligand accommodates the substitution within the S1 pocket geometry — but the multi-seed analysis reveals a consistent, reproducible weakening of the predicted affinity.
 
 ---
 
 ## 4. Discussion
 
-The −0.2 kcal/mol shift suggests that **escitalopram** (the (S)-enantiomer) may be less sensitive to the S438T steric clash than its racemic counterpart, citalopram. In the rigid-receptor model, the pocket accommodates the Threonine side chain without disrupting the primary pharmacophoric contacts with Y95 and D98.
+The +0.251 kcal/mol shift suggests that **escitalopram** (the (S)-enantiomer) shows marginally weaker predicted binding at the S438T mutant relative to wild-type. In the rigid-receptor model, the pocket accommodates the Threonine side chain without fully disrupting the primary pharmacophoric contacts with Y95 and D98.
 
-However, rigid docking does not capture the dynamic "locking" mechanism or the desolvation penalties associated with the S438T substitution. The −0.2 kcal/mol difference falls within Vina's scoring noise (~0.5 kcal/mol), making the binding essentially equivalent to wild-type in this structural snapshot. This contrasts with the experimentally observed 320-fold increase in $K_i$ for escitalopram reported by Andersen *et al.* (2009), which is attributed to desolvation costs, Na⁺ coordination disruption at S438, and induced-fit conformational changes invisible to a static-receptor model. These effects must be addressed in future flexible-receptor or molecular dynamics studies.
+However, rigid docking does not capture the dynamic "locking" mechanism or the desolvation penalties associated with the S438T substitution. The +0.251 kcal/mol difference falls within Vina's scoring noise (~0.5 kcal/mol), making the binding essentially equivalent to wild-type in this structural snapshot. This contrasts with the experimentally observed 320-fold increase in $K_i$ for escitalopram reported by Andersen *et al.* (2009), which is attributed to desolvation costs, Na⁺ coordination disruption at S438, and induced-fit conformational changes invisible to a static-receptor model. These effects must be addressed in future flexible-receptor or molecular dynamics studies.
 
 ---
 
 ## 5. Conclusion
 
-This study provides a computational assessment of the SERT S438T mutation using *in-silico* mutagenesis and molecular docking. Escitalopram retains high affinity for the S438T mutant (−8.3 kcal/mol vs. −8.1 kcal/mol wild-type; $\Delta\Delta G = -0.2$ kcal/mol). These results establish a rigid-docking baseline and set the stage for molecular dynamics simulations to resolve the kinetic and thermodynamic consequences of the S438T substitution.
+This study provides a computational assessment of the SERT S438T mutation using *in-silico* mutagenesis and multi-seed molecular docking. Escitalopram retains high affinity for the S438T mutant (−8.324 ± 0.012 kcal/mol vs. −8.575 ± 0.013 kcal/mol wild-type; $\Delta\Delta G = +0.251$ kcal/mol; n=5, exhaustiveness=32). These results establish a robust rigid-docking baseline and set the stage for molecular dynamics simulations to resolve the kinetic and thermodynamic consequences of the S438T substitution.
 
 ---
 

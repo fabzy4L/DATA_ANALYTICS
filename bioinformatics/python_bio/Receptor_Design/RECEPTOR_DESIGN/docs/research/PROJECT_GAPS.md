@@ -1,6 +1,6 @@
-# RECEPTOR_DESIGN — Project Gaps (Updated 2026-05-01)
+# RECEPTOR_DESIGN — Project Gaps (Updated 2026-05-02)
 
-The core computational pipeline has been successfully pivoted to the biologically relevant **S438T** mutation after correcting a significant digit-swap error (348 vs 438).
+The core computational pipeline investigates the **S438T** mutation in SERT and its effect on escitalopram binding affinity.
 
 ---
 
@@ -8,11 +8,10 @@ The core computational pipeline has been successfully pivoted to the biologicall
 
 - Structural audit and provenance correction (scripts/structural_audit.py)
 - True WT extraction: data/structures/5i6z_A_true.pdb
-- **Correction of Site:** Identified digit-swap error in initial plan (A348T vs S438T).
-- Correct in-silico mutagenesis for S438T: data/structures/5i6z_A_S438T.pdb
+- In-silico mutagenesis for S438T: data/structures/5i6z_A_S438T.pdb
 - Ligand and receptor PDBQT generation for S438T
 - AutoDock Vina 1.2.5 docking — WT and S438T, 10 poses each
-- Research article: docs/research_article.md / .html
+- Research article: docs/research/S438T_RESEARCH_ARTICLE.md / .html
 
 ---
 

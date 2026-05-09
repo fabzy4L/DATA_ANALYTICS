@@ -13,6 +13,7 @@ R and Python analysis of gene expression changes associated with nicotine use ac
 - **R / R Markdown** — statistical modeling, interaction models, figure generation
 - **Python** — normality testing on CT values  
 - **Power BI** — fold-change dashboard
+- **React/JSX** — interactive visualization components (`src/`)
 - **qPCR instrument data** — raw CT value exports
 
 ---
@@ -36,8 +37,15 @@ GENE_EXPRESSION NICOTINE_R/
 │   ├── figures/                # Static figure exports (PDFs, etc.)
 │   └── powerbi/                # Power BI dashboard (.pbix) and PDF exports
 │
-└── archive/
-    └── r_drafts/               # Untitled/draft notebooks kept for reference
+├── src/
+│   └── qpcr_atlas.jsx          # React/JSX visualization component
+│
+├── archive/
+│   └── r_drafts/               # Untitled/draft notebooks kept for reference
+│
+├── qPCR DATA TRANSFORMER SHEET.xlsx  # Master Excel calculation engine
+├── STATISTICAL_METHODS.md            # Detailed statistical rationale & workflow
+└── README.md                         # Project overview and documentation
 ```
 
 ---
@@ -66,55 +74,16 @@ Python script: `notebooks/python/qPCR_normality.py` — normality testing on CT 
 | `qPCRCTValues.csv` | CT values — verify against above; may be duplicate |
 
 ### `data/raw/fold_change/`
-Contains the master Excel sheet (`qPCR DATA TRANSFORMATION SHEET.xlsx`), fold-change matrices, and all qPCR value subsets. Several files are intermediate copies or versioned variants — review before deleting:
+Contains master Excel sheet copies and all qPCR value subsets:
 
 | File | Notes |
 |---|---|
 | `qPCR all values.csv` | Base catch-all |
 | `qPCR all values - qPCR - HUMAN.csv` | Human subset |
 | `qPCR all values - qPCR - RAT.csv` | Rat subset |
-| `qPCR all values - qPCR - RAT - 2.csv` | Rat revision |
-| `qPCR all values - qPCR - RAT - 2 balanced.csv` | Balanced variant |
-| `qPCR all values - HIGH FAT.csv` | High-fat diet subset (renamed from typo "HIG FAT") |
-| `qPCR all values - qPCR DATA - non fold.csv` | Non-normalized (delta Ct) values |
-| `qPCR all values - qPCR DATA - ALL RAT.csv` | All-rat combined — verify vs ALLRAT below |
-| `qPCR all values - qPCR DATA - ALLRAT.csv` | All-rat combined — verify vs ALL RAT above |
-| `qPCR all values - qPCR DATA (3).csv` | Draft/versioned copy |
-| `qPCR all values - Copy of FOLD CHANGE.csv` | Accidental copy — review for deletion |
-| `qPCR all values - Copy of GENES TRANSPOSED (1) (1).csv` | Accidental copy — review for deletion |
-| `qPCR all values - Copy of NON FOLD.csv` | Accidental copy — review for deletion |
+| `qPCR all values - HIGH FAT.csv` | High-fat diet subset |
 | `qPCR DATA TRANSFORMATION SHEET - FC MATRIX - MOBP CORRECTED.csv` | MOBP-corrected fold-change matrix |
 | `qPCR DATA TRANSFORMATION SHEET - FOLD CHANGE - MATRIX DATA.csv` | Fold-change matrix |
-| `qPCR DATA TRANSFORMATION SHEET - MATRIX DATA TRANSFORMATION.csv` | Transformation intermediary |
-| `qPCR DATA TRANSFORMATION SHEET.xlsx` | Master Excel workbook |
-
-### `data/processed/`
-| File | Description |
-|---|---|
-| `GeneStatistics.csv` | Gene-level statistics output from Python script |
-| `GeneStatistics2.csv` | Second run or revised statistics output |
-
----
-
-## Outputs (`outputs/`)
-
-- **`html/`** — All `.nb.html` renders from R notebooks. Some filenames correspond to renamed or draft notebooks (orphaned renders); re-knit the canonical `.Rmd` files to refresh.
-- **`figures/`** — `heatmap_human.pdf` — human gene expression heatmap.
-- **`powerbi/`** — `Gene Expression Average Fold Changes.pbix` (dashboard) and PDF export. The `(1).pdf` variant is a duplicate download.
-
----
-
-## Archive (`archive/r_drafts/`)
-
-Kept for reference — these are untitled "R Notebook" drafts or scratch files superseded by the canonical notebooks above.
-
-| File | Original Title | Status |
-|---|---|---|
-| `1.Rmd` | R Notebook | Scratch — variable calls only |
-| `2.Rmd` | R Notebook | Early draft of `05_human_interaction_model` |
-| `3.Rmd` | CORRELATIONAL DATA | May contain unique correlational content |
-| `FIGURES R STUDIO NOTEBOOK - NICOTINE.Rmd` | R Notebook | Predecessor of `06_nicotine_figures` |
-| `Factors in R.Rmd` | R Notebook | Practice file — R factor syntax only |
 
 ---
 
@@ -125,3 +94,71 @@ All `.Rmd` notebooks use relative paths from `notebooks/r/` and will resolve cor
 ```r
 read.csv("../../data/raw/fold_change/qPCR all values - qPCR.csv")
 ```
+
+---
+
+# Statistical Methods: Nicotine Exposure Gene Expression Study
+
+**Reference:** Vargas-Medrano J, Carcoba LM, et al. (2023). *Sex and diet-dependent gene alterations in human and rat brains with a history of nicotine exposure*. Front. Psychiatry. [doi: 10.3389/fpsyt.2023.1104563](https://doi.org/10.3389/fpsyt.2023.1104563)
+
+---
+
+## 1. Study Design and Data Preparation
+The study utilizes a cross-species comparative design (Human and Rat) to investigate the effects of nicotine exposure on the expression of genes related to neuroplasticity and oligodendrocyte function.
+
+### qPCR Data Transformation
+Raw Cycle Threshold (Ct) values obtained from qPCR instruments were processed using the **$\Delta\Delta Ct$ methodology**:
+*   **Normalization:** Gene expression was normalized to **GAPDH** (the internal housekeeping control) to account for variations in RNA quality and input quantity.
+*   **Relative Quantification:** Relative expression was calculated as **$2^{-\Delta Ct}$**.
+*   **Fold Change (FC):** Final data were expressed as Fold Change relative to the average of the control group.
+
+---
+
+## 2. Mathematical Justification for Transformations
+To satisfy the assumptions of General Linear Models (GLM) and ANOVA, data were subjected to a rigorous transformation pipeline.
+
+### Logarithmic Transformation ($Log_{10}$)
+*   **Justification:** Raw Fold Change data is inherently asymmetrical (upregulation spans 1 to $\infty$, while downregulation is compressed between 0 and 1). This asymmetry violates the assumption of homoscedasticity (equal variance).
+*   **Result:** Applying $Log_{10}$ (using the `fx` function) creates a symmetrical additive scale where a 2-fold increase (+0.301) and a 2-fold decrease (-0.301) are mathematically equivalent, stabilizing variance across treatment groups.
+
+### Z-score Standardisation (Scaling)
+*   **Justification:** Different genes exhibit baseline expression levels differing by orders of magnitude. 
+*   **Result:** The `scale` (or `fx2`) function centers data at a mean of 0 with a standard deviation of 1, allowing for valid cross-gene comparisons and effective visualization.
+
+### Power Transformation ($x^{-1/2}$)
+*   **Justification:** Used when $Log_{10}$ fails to resolve heteroscedasticity or non-normality.
+*   **Result:** Stabilizes the relationship between the mean and variance for specific biological distributions.
+
+---
+
+## 3. Statistical Decision Tree
+The analysis followed a systematic workflow to ensure the validity of $P$-values:
+
+1.  **Normality Check:** Every gene/cohort subset was tested using the **Shapiro-Wilk test**.
+2.  **Initial Transformation:** If $P < 0.05$ (non-normal), data was **$Log_{10}$ transformed**.
+3.  **Secondary Validation:** The transformed data was re-tested for normality.
+4.  **Alternative Paths:**
+    *   **Parametric Path:** If data became normal ($P > 0.05$), **ANOVA/Linear Models** were applied.
+    *   **Non-Parametric Path:** If data remained non-normal despite transformation, non-parametric tests (Kruskal-Wallis) were utilized.
+5.  **Multi-Way ANOVA:** Verified normal data were then passed into factorial models (`Gene ~ DX * SEX * DIET`).
+
+---
+
+## 4. Statistical Modeling Framework
+The core analysis utilizes General Linear Models (GLM) and Multi-way ANOVA to identify main effects and complex biological interactions.
+
+### Main Effects Analysis
+Initial screens determined the independent impact of **Diagnosis (DX):** Control vs. Nicotine/VDS.
+
+### Interaction Modeling
+To address the sex and diet-dependent nature of the alterations:
+*   **Sex Interactions:** `Gene ~ DX * SEX` determined if nicotine exposure effects were sex-specific.
+*   **Dietary Interactions:** In the rat cohort, `DX * DIET` analyzed the metabolic modulation of gene regulation.
+*   **Species Interactions:** `DX * SPECIES` evaluated translational conservation.
+
+---
+
+## 5. Post-Hoc Analysis and Significance
+*   **Tukey’s Honest Significant Difference (HSD):** Applied following significant ANOVA results to identify specific pairwise differences.
+*   **Significance Thresholds:** $P < 0.05$ (Significant); $0.05 \leq P < 0.10$ (Trend).
+*   **Software:** Analysis implemented using **R (v4.x)** and **Python**.

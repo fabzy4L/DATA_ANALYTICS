@@ -1,0 +1,87 @@
+============================================================
+  S1 Sequence Extraction Report
+============================================================
+  Input sequences     : 10778
+  S1 candidates found : 34
+  Filter mode         : broad
+  S1 domain trim      : no (full spike)
+  Output file         : analysis\02_epitope_prediction\s1_candidates.fasta
+------------------------------------------------------------
+  Sequence length — min : 109 aa
+  Sequence length — max : 1436 aa
+  Sequence length — avg : 436 aa
+------------------------------------------------------------
+  Cluster sizes for matched sequences:
+    tr|A0A0N4U310|A0A0N4U310_DRAME  cluster size = 1
+    tr|A0A0N4U419|A0A0N4U419_DRAME  cluster size = 1
+    tr|A0A0N4U4V3|A0A0N4U4V3_DRAME  cluster size = 1
+    tr|A0A0N4U5F6|A0A0N4U5F6_DRAME  cluster size = 1
+    tr|A0A0N4U5G7|A0A0N4U5G7_DRAME  cluster size = 1
+    tr|A0A0N4U5V8|A0A0N4U5V8_DRAME  cluster size = 1
+    tr|A0A0N4U9F5|A0A0N4U9F5_DRAME  cluster size = 1
+    tr|A0A0N4UBM4|A0A0N4UBM4_DRAME  cluster size = 1
+    tr|A0A0N4UCS6|A0A0N4UCS6_DRAME  cluster size = 1
+    tr|A0A0N4UDU9|A0A0N4UDU9_DRAME  cluster size = 1
+    tr|A0A0N4UEW1|A0A0N4UEW1_DRAME  cluster size = 1
+    tr|A0A0N4UEZ3|A0A0N4UEZ3_DRAME  cluster size = 1
+    tr|A0A0N4UFV9|A0A0N4UFV9_DRAME  cluster size = 1
+    tr|A0A0N4UG16|A0A0N4UG16_DRAME  cluster size = 1
+    tr|A0A0N4UGP5|A0A0N4UGP5_DRAME  cluster size = 1
+    tr|A0A0N4UHB0|A0A0N4UHB0_DRAME  cluster size = 1
+    tr|A0A0N4UIH0|A0A0N4UIH0_DRAME  cluster size = 1
+    tr|A0A0N4UIW0|A0A0N4UIW0_DRAME  cluster size = 1
+    tr|A0A0N4UIX2|A0A0N4UIX2_DRAME  cluster size = 1
+    tr|A0A0N4UKS3|A0A0N4UKS3_DRAME  cluster size = 1
+    tr|A0A0N4UN76|A0A0N4UN76_DRAME  cluster size = 1
+    tr|A0A0N4UP42|A0A0N4UP42_DRAME  cluster size = 1
+    tr|A0A0N4UP55|A0A0N4UP55_DRAME  cluster size = 1
+    tr|A0A0N4UPZ3|A0A0N4UPZ3_DRAME  cluster size = 1
+    tr|A0A158Q390|A0A158Q390_DRAME  cluster size = 1
+    tr|A0A158Q455|A0A158Q455_DRAME  cluster size = 1
+    tr|A0A158Q4C1|A0A158Q4C1_DRAME  cluster size = 1
+    tr|A0A158Q4S8|A0A158Q4S8_DRAME  cluster size = 1
+    tr|A0A158Q4Z7|A0A158Q4Z7_DRAME  cluster size = 2
+    tr|A0A158Q510|A0A158Q510_DRAME  cluster size = 1
+    tr|A0A158Q676|A0A158Q676_DRAME  cluster size = 1
+    tr|A0A3P7PM47|A0A3P7PM47_DRAME  cluster size = 1
+    tr|A0A3P7PQI6|A0A3P7PQI6_DRAME  cluster size = 1
+    tr|A0A3P7PU42|A0A3P7PU42_DRAME  cluster size = 1
+------------------------------------------------------------
+  Headers of extracted sequences:
+
+    [629 aa]  tr|A0A0N4UEW1|A0A0N4UEW1_DRAME Ribosome biogenesis protein BOP1 homolog OS=Dracunculus medinensis OX
+    [297 aa]  tr|A0A0N4UG16|A0A0N4UG16_DRAME Elongation of very long chain fatty acids protein OS=Dracunculus medi
+    [945 aa]  tr|A0A0N4UN76|A0A0N4UN76_DRAME Dynamin-like 120 kDa protein, form S1 OS=Dracunculus medinensis OX=31
+    [165 aa]  tr|A0A158Q510|A0A158Q510_DRAME DNA replication complex GINS protein PSF3 OS=Dracunculus medinensis O
+    [289 aa]  tr|A0A0N4UHB0|A0A0N4UHB0_DRAME Pyridoxal phosphate homeostasis protein OS=Dracunculus medinensis OX=
+    [1189 aa]  tr|A0A158Q4S8|A0A158Q4S8_DRAME Structural maintenance of chromosomes protein OS=Dracunculus medinens
+    [465 aa]  tr|A0A0N4UFV9|A0A0N4UFV9_DRAME Inheritance of peroxisomes protein 1 OS=Dracunculus medinensis OX=318
+    [319 aa]  tr|A0A0N4U5F6|A0A0N4U5F6_DRAME Elongation of very long chain fatty acids protein OS=Dracunculus medi
+    [279 aa]  tr|A0A0N4UDU9|A0A0N4UDU9_DRAME Elongation of very long chain fatty acids protein OS=Dracunculus medi
+    [255 aa]  tr|A0A0N4UKS3|A0A0N4UKS3_DRAME Ephrin RBD domain-containing protein OS=Dracunculus medinensis OX=318
+    [228 aa]  tr|A0A0N4U5G7|A0A0N4U5G7_DRAME Peptidase S1 domain-containing protein OS=Dracunculus medinensis OX=3
+    [427 aa]  tr|A0A0N4UIH0|A0A0N4UIH0_DRAME GlcNAc-PI synthesis protein OS=Dracunculus medinensis OX=318479 GN=DM
+    [569 aa]  tr|A0A0N4UEZ3|A0A0N4UEZ3_DRAME Letm1 RBD domain-containing protein OS=Dracunculus medinensis OX=3184
+    [213 aa]  tr|A0A0N4UP55|A0A0N4UP55_DRAME Peptidase S1 domain-containing protein OS=Dracunculus medinensis OX=3
+    [304 aa]  tr|A0A158Q455|A0A158Q455_DRAME Peptidase S1 domain-containing protein OS=Dracunculus medinensis OX=3
+    [798 aa]  tr|A0A0N4UPZ3|A0A0N4UPZ3_DRAME S1 motif domain-containing protein OS=Dracunculus medinensis OX=31847
+    [1346 aa]  tr|A0A0N4UIW0|A0A0N4UIW0_DRAME Structural maintenance of chromosomes protein OS=Dracunculus medinens
+    [357 aa]  tr|A0A158Q676|A0A158Q676_DRAME Ribosome biogenesis protein NOP53 OS=Dracunculus medinensis OX=318479
+    [1436 aa]  tr|A0A158Q4C1|A0A158Q4C1_DRAME Structural maintenance of chromosomes protein OS=Dracunculus medinens
+    [390 aa]  tr|A0A0N4UP42|A0A0N4UP42_DRAME Peptidase S1 domain-containing protein OS=Dracunculus medinensis OX=3
+    [168 aa]  tr|A0A0N4U9F5|A0A0N4U9F5_DRAME Ephrin RBD domain-containing protein OS=Dracunculus medinensis OX=318
+    [303 aa]  tr|A0A158Q390|A0A158Q390_DRAME Ephrin RBD domain-containing protein OS=Dracunculus medinensis OX=318
+    [557 aa]  tr|A0A158Q4Z7|A0A158Q4Z7_DRAME Structural maintenance of chromosomes protein 2 OS=Dracunculus medine
+    [135 aa]  tr|A0A0N4UGP5|A0A0N4UGP5_DRAME Ephrin RBD domain-containing protein OS=Dracunculus medinensis OX=318
+    [225 aa]  tr|A0A0N4UCS6|A0A0N4UCS6_DRAME DNA replication complex GINS protein SLD5 OS=Dracunculus medinensis O
+    [290 aa]  tr|A0A0N4U310|A0A0N4U310_DRAME Elongation of very long chain fatty acids protein OS=Dracunculus medi
+    [281 aa]  tr|A0A0N4U419|A0A0N4U419_DRAME Elongation of very long chain fatty acids protein OS=Dracunculus medi
+    [235 aa]  tr|A0A0N4U4V3|A0A0N4U4V3_DRAME Peptidase S1 domain-containing protein OS=Dracunculus medinensis OX=3
+    [180 aa]  tr|A0A0N4U5V8|A0A0N4U5V8_DRAME 60S ribosome subunit biogenesis protein NIP7 homolog OS=Dracunculus m
+    [109 aa]  tr|A0A3P7PM47|A0A3P7PM47_DRAME Peptidase S1 domain-containing protein OS=Dracunculus medinensis OX=3
+    [261 aa]  tr|A0A3P7PQI6|A0A3P7PQI6_DRAME Structural maintenance of chromosomes protein 5 OS=Dracunculus medine
+    [363 aa]  tr|A0A0N4UBM4|A0A0N4UBM4_DRAME FIP-RBD domain-containing protein OS=Dracunculus medinensis OX=318479
+    [563 aa]  tr|A0A0N4UIX2|A0A0N4UIX2_DRAME Ribosome biogenesis protein BRX1 homolog OS=Dracunculus medinensis OX
+    [264 aa]  tr|A0A3P7PU42|A0A3P7PU42_DRAME Ribosome biogenesis protein NSA2 homolog OS=Dracunculus medinensis OX
+
+============================================================

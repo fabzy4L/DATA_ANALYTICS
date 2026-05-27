@@ -91,8 +91,8 @@ echo "📋 Download instructions created: $TOOLS_DIR/DOWNLOAD_INSTRUCTIONS.md"
 NETMHCPAN_FILE=""
 NETMHCIIPAN_FILE=""
 
-# Look for NetMHCpan files
-for file in downloads/netMHCpan-4.1*.tar.gz; do
+# Look for NetMHCpan files (4.1 or 4.2)
+for file in downloads/netMHCpan-4.*.tar.gz; do
     if [ -f "$file" ]; then
         NETMHCPAN_FILE="$file"
         break
@@ -143,7 +143,7 @@ fi
 NETMHCPAN_DIR=""
 NETMHCIIPAN_DIR=""
 
-for dir in netMHCpan-4.1*/ ; do
+for dir in netMHCpan-4.*/ ; do
     if [ -d "$dir" ]; then
         NETMHCPAN_DIR="$dir"
         break

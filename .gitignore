@@ -15,3 +15,7 @@ __pycache__/
 .idea/
 .vscode/
 *.DS_Store
+
+# Employer operational data and tools: never commit
+business_apps/rtb_app/
+rtb_app/

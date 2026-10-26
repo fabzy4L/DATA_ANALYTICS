@@ -36,8 +36,7 @@ A portfolio of data analytics and bioinformatics projects organized by domain. L
 │   └── phd_dissertation/                   # PhD dissertation R Markdown source files
 │
 ├── business_apps/                          # Business intelligence and applications
-│   ├── business_analytics/                 # Income analysis (R)
-│   └── rtb_app/                            # RTB (Return to Baseline) Streamlit app (Python)
+│   └── business_analytics/                 # Income analysis (R)
 │
 ├── clinical_lab_data/                      # Clinical lab tracking and instrumentation
 │   └── pain_med_data/                      # SCIEX mass spec, UA trackers, qPCR tools (XLSX)
@@ -68,7 +67,7 @@ The largest research domain. `nicotine_gene_expression/` is the most complete pr
 `biostats_course_projects/` contains R Markdown labs analyzing datasets such as `bumpus.csv`, `daphnia.csv`, and `telomere inheritance.csv`. `analytics_learning/` is the Python counterpart — foundational data manipulation exercises.
 
 ### business_apps/
-`rtb_app/` is a production-style Streamlit application for Return-to-Baseline clinical analysis with multiple versioned app files and CSV data exports.
+`business_analytics/` contains income analysis in R.
 
 ### infrastructure/
 `database_sql/` contains the `qPCR_db.sql` schema and gene database scripts. `data_acquisition/` holds Selenium-based web scrapers. `utilities/` provides reusable Python scripts.

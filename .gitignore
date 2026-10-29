@@ -19,3 +19,25 @@ __pycache__/
 # Employer operational data and tools: never commit
 business_apps/rtb_app/
 rtb_app/
+
+# Patient-identifiable clinical lab sheets (WTXPI): keep local only
+clinical_lab_data/pain_med_data/WTXPI_PT_TRACK_SHEET*
+clinical_lab_data/pain_med_data/UA_*
+clinical_lab_data/pain_med_data/EBO_MASTER_UA_TRACKER.xlsx
+clinical_lab_data/pain_med_data/1015_*
+clinical_lab_data/pain_med_data/SCHEDULER_VERIFIER.xlsx
+clinical_lab_data/pain_med_data/QR_CODER.xlsx
+# Personal finance sheets
+clinical_lab_data/pain_med_data/Living Expenses.xlsx
+clinical_lab_data/pain_med_data/PERSONAL FINANCES ANALYSIS.xlsx
+# Personal raw genotype data
+bioinformatics/dna_analysis/CSV/AlvarezPrimo_MyHeritage_Raw_DNA.csv
+bioinformatics/dna_analysis/CSV/DNA_2.csv
+bioinformatics/dna_analysis/CSV/FAP_RAW_DNA.csv
+bioinformatics/dna_analysis/CSV/rsid_srd1.csv
+# TTUHSC Luminex study data and results (unpublished; data belongs to TTUHSC)
+bioinformatics/proteomics/RAW_DATA/
+bioinformatics/proteomics/dfc_*.csv
+bioinformatics/proteomics/.RData
+bioinformatics/proteomics/LUMINEX.docx
+bioinformatics/proteomics/R_PROJECT/LUMINEX.nb.html
